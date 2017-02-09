@@ -1,0 +1,19 @@
+<div ng-controller='sessionViewController'>
+
+<div class = "row">
+  <div class="col-md-3"></div>
+  <div class="col-md-5"></div>
+  <div class="col-md-4">
+  <button ng-hide="showAll" class="ng-hide" ng-click="setShowAll(true)">Show stats for all sessions</button>
+  <button ng-show="showAll" ng-click="setShowAll(false)">Hide stats for all sessions</button>
+  </div>
+</div>
+
+<div class="row container-fluid">
+
+  <div class="col-md-2">
+    <h4>{{pagename}}</h4>
+    <h4>Session purchasing history for your site:</h4>
+    <!--<div class="">{{}}</div>-->
+  </div>
+</div>

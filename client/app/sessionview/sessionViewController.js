@@ -1,6 +1,6 @@
-angular.module("sharkanalytics.userView", [])
+angular.module("sharkanalytics.sessionView", [])
 
-.controller("userViewController", function($scope, Users) {
+.controller("sessionViewController", function($scope, Sessions) {
 
   $scope.pageProperties = {};
   $scope.showAll = true;
@@ -19,10 +19,10 @@ angular.module("sharkanalytics.userView", [])
     $scope.showDates = !boolean;
   }
 
-  $scope.getUser = function(page) {
-    Pages.getPage(page).then(function (res, err) {
+  $scope.getSession = function(session) {
+    Session.getSession(session).then(function (res, err) {
       if (err) {
-        console.log('$scope.getUsers error:' + err);
+        console.log('$scope.getSession error:' + err);
         throw err;
       } else {
         //TO_DO: Define data to be grabbed for displaying
@@ -31,10 +31,10 @@ angular.module("sharkanalytics.userView", [])
     })
   }
 
-  var allUsers = 0;
+  var allSession = 0;
 
-  $scope.getAllUsers = function () {
-    Users.getAllUsers() //Defined from factory.js
+  $scope.getAllSessions = function () {
+    Sessions.getAllSessions() //Defined from factory.js
       .then (function (res, err) {
         if(err) {
           console.log('$scope.getAllUsers error:' + err);
