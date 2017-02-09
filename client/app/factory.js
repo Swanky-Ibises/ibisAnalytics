@@ -64,3 +64,35 @@ angular.module('sharkanalytics.factory', [])
     getPage: getPage
   };
 })
+
+/* USERS FACTORY */
+.factory('Users', function ($http) {
+
+  //should get all links from database
+  var getAllUsers = function () {
+    return $http({
+      method: 'GET',
+      url: '/allUsers'
+    })
+    .then(function (response) {
+      return response;
+    });
+  };
+
+  //should get a specified link from database
+  var getUser = function (user) {
+    return $http({
+      method: 'GET',
+      url: '/user',
+      params: {title: title}
+    })
+    .then(function (response) {
+      return response;
+    });
+  };
+
+  return {
+    getAllUsers: getAllUsers,
+    getUser: getUser
+  };
+});
