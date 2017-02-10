@@ -16,7 +16,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-
 //set app to use body-parser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
