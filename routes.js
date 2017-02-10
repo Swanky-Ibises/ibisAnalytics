@@ -122,6 +122,10 @@ module.exports = function(app, express) {
     });
   });
 
+  app.post('/pagetime', function(req, res, next) {
+    console.log('request body', req.body);
+    res.send('pageTime got')
+  });
 };
 
 
