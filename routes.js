@@ -33,6 +33,7 @@ module.exports = function(app, express) {
 
   //POST request
   app.post('/linkClick', function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     //pull url from request body
     var url = req.body.url;
     //create new timestamp
@@ -91,6 +92,7 @@ module.exports = function(app, express) {
 
   //POST request
   app.post('/pageView', function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     //pull title from request body
     var title = req.body.title;
     //create new timestamp
