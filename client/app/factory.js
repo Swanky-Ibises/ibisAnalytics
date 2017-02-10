@@ -36,7 +36,7 @@ angular.module('sharkanalytics.factory', [])
 /* PAGES FACTORY */
 .factory('Pages', function ($http) {
 
-  //should get all links from database
+  //should get all pages from database
   var getAllPages = function () {
     return $http({
       method: 'GET',
@@ -47,7 +47,7 @@ angular.module('sharkanalytics.factory', [])
     });
   };
 
-  //should get a specified link from database
+  //should get a specified pages from database
   var getPage = function (title) {
     return $http({
       method: 'GET',
@@ -64,3 +64,35 @@ angular.module('sharkanalytics.factory', [])
     getPage: getPage
   };
 })
+
+/* USERS FACTORY */
+.factory('Users', function ($http) {
+
+  //should get all sessions from database
+  var getAllSessions = function () {
+    return $http({
+      method: 'GET',
+      url: '/allSessions'
+    })
+    .then(function (response) {
+      return response;
+    });
+  };
+
+  //should get a specified sessions from database
+  var getSession = function (user) {
+    return $http({
+      method: 'GET',
+      url: '/sessions',
+      params: {title: title}
+    })
+    .then(function (response) {
+      return response;
+    });
+  };
+
+  return {
+    getAllSessions: getAllSessions,
+    getSession: getSession
+  };
+});
