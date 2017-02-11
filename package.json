@@ -23,10 +23,15 @@
   "dependencies": {
     "angular": "^1.6.1",
     "angular-chart.js": "^1.1.1",
+    "angular-jwt": "^0.1.9",
+    "angular-lock": "^1.0.5",
     "body-parser": "^1.16.0",
+    "connect-ensure-login": "^0.1.1",
     "cors": "^2.8.1",
     "express": "^4.14.0",
     "jquery": "^3.1.1",
-    "mongoose": "^4.7.8"
+    "mongoose": "^4.7.8",
+    "passport": "^0.3.2",
+    "passport-auth0": "^0.6.0"
   }
 }

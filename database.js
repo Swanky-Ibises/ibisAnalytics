@@ -2,8 +2,8 @@
 var mongoose = require('mongoose');
 
 //connect to mLab database via heroku
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/analyticdata');
- //open a mongoose connection
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/analyticdata');
+
 var db = mongoose.connection;
 
 //handle errors on connection
