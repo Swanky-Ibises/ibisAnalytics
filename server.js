@@ -6,6 +6,13 @@ var path = require('path');
 var cors = require ('cors');
 var app = express();
 var fs = require('fs');
+var jwt = require('express-jwt');
+
+//jwt middleware
+var authCheck = jwt({
+  secret: new Buffer('vvbacbW93BjVsha-Umhhz0LcHRq1SYs13ZbR_SXp7OgNnY48OZu6S6RC_bN9YEP0', 'base64'),
+  audience: '9ZbTuQ2rS1kaqKXEDq3oBaRuOAGldqvQ'
+});
 
 //enable CORS
 app.use(cors());
