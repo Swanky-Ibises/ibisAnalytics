@@ -4,7 +4,12 @@ angular.module('sharkanalytics',
   'sharkanalytics.factory',
   'sharkanalyticss.linkClickPlotly',
   'sharkanalytics.pageViewPlotly',
-  'ngRoute'])
+  'ngRoute',
+  'angular-jwt',
+  'auth0',
+  'angular-storage',
+  'ui.router'
+  ])
 
 .config(function ($routeProvider, $httpProvider) {
   $routeProvider
