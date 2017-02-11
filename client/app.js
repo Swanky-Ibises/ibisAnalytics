@@ -1,4 +1,5 @@
-angular.module('sharkanalytics',
+angular
+.module('sharkanalytics',
   ['sharkanalytics.pageView',
   'sharkanalytics.linkClick',
   'sharkanalytics.factory',
@@ -11,7 +12,14 @@ angular.module('sharkanalytics',
   'ui.router'
   ])
 
-.config(function ($routeProvider, $httpProvider) {
+.config(function ($routeProvider, $httpProvider, authProvider) {
+
+  console.log(authProvider)
+  authProvider.init({
+    domain: 'swanky-ibises.auth0.com',
+    clientID: '9ZbTuQ2rS1kaqKXEDq3oBaRuOAGldqvQ'
+  });
+
   $routeProvider
     .when('/pageView', {
       templateUrl: 'app/pageview/pageView.html',
@@ -29,3 +37,19 @@ angular.module('sharkanalytics',
       redirectTo: '/'
     })
   })
+
+.controller('navbarController', function($scope, auth, store){
+  $scope.login = function(){
+    console.log(auth);
+    console.log(store);
+    auth.signin({}, 
+      function(profile, token){
+        store.set("profile", profile);
+        store.set("webToken", token);
+      },
+      function(err){
+        console.log(err);
+      }
+    );
+  }
+});
