@@ -123,11 +123,70 @@ module.exports = function(app, express) {
   });
 
   app.post('/pagetime', function(req, res, next) {
-    console.log('request body', req.body);
-    res.send('pageTime got')
+    res.header("Access-Control-Allow-Origin", "*");
+    var storedObject = {
+      timeDifference: req.body.timeDifference,
+      location: req.body.location,
+      date: req.body.date
+    };
+    var domain = req.body.domain;
+    model.pageTimeModel.findOne({domain: domain})
+      .exec(function(err, pageTimes) {
+        if (pageTimes) {
+          if (pageTimes.timesArray.length >= 200) {
+            pageTimes.timesArray.shift();
+          }
+          pageTimes.timesArray.push(storedObject);
+          pageTimes.save(function(err, user) {
+            if (err) {
+              console.log('error in saving page');
+              res.status(500).send(err);
+            } else {
+              console.log('hello world');
+              // res.send('user');
+            }
+          });
+        } else {
+          console.log('cannot find model');
+        }
+      })
+    console.log('this object', storedObject);
+    res.send('pageTime got');
+  });
+
+  app.post('/create', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    var google = req.body.google;
+    var domain = req.body.domain;
+    var newDomain = new model.pageTimeModel({
+      google: google,
+      domain: domain,
+      timesArray: []
+    });
+    newDomain.save(function(err, user) {
+      if (err) {
+        console.log('error')
+        res.send(err);
+      } else {
+        console.log('user created');
+        res.send('user created');
+      }
+    })
+  });
+
+  app.post('/pagetimeview', function(req, res, next) {
+    var google = req.body.google;
+    model.pageTimeModel.findOne({google: google}, function(err, time) {
+      if(err) {
+        throw err;
+      } else {
+        res.status(200).send(time);
+      }
+    });
   });
 };
 
+// {"domain":"bman","timeDifference": "250087","location": "checkout","date": "2017-02-11T07:04:03.740Z" }
 
 
 

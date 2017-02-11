@@ -16,12 +16,19 @@ var pageViewSchema = mongoose.Schema({
   date: Array
 });
 
+var pageTimeSchema = mongoose.Schema({
+  google: String,
+  domain: String,
+  timesArray: Array
+});
 //create models for each schema
 var linkClickModel = mongoose.model('linkClickSchema', linkClickSchema);
 var pageViewModel = mongoose.model('pageViewSchema', pageViewSchema);
+var pageTimeModel = mongoose.model('pageTimeSchema', pageTimeSchema);
 
 //export models
 module.exports = {
   linkClickModel: linkClickModel,
   pageViewModel: pageViewModel,
+  pageTimeModel: pageTimeModel
 };
