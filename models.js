@@ -21,14 +21,23 @@ var pageTimeSchema = mongoose.Schema({
   domain: String,
   timesArray: Array
 });
+
+var addressSchema = mongoose.Schema({
+  username: String,
+  domain: String,
+  locationArray: Array
+});
+
 //create models for each schema
 var linkClickModel = mongoose.model('linkClickSchema', linkClickSchema);
 var pageViewModel = mongoose.model('pageViewSchema', pageViewSchema);
 var pageTimeModel = mongoose.model('pageTimeSchema', pageTimeSchema);
+var addressModel = mongoose.model('addressSchema', addressSchema);
 
 //export models
 module.exports = {
-  linkClickModel: linkClickModel,
-  pageViewModel: pageViewModel,
-  pageTimeModel: pageTimeModel
+  linkClickModel,
+  pageViewModel,
+  pageTimeModel,
+  addressModel
 };
