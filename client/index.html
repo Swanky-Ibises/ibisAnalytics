@@ -6,7 +6,8 @@
     <link rel='stylesheet' type='text/css' href="styles/style.css">
     <!--Importing bootstrap for page layout-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <!--Importing angular-->
+    <!--Importing angular and authentication-->
+    <script type="text/javascript" src="https://cdn.auth0.com/js/lock-9.0.min.js"></script>
     <script src="/scripts/angular/angular.js"></script>
     <script src="/scripts/angular-jwt/dist/angular-jwt.js"></script>
     <script src="/scripts/auth0-angular/build/auth0-angular.js"></script>
@@ -50,17 +51,15 @@
       <div class='col-md-1'><h4>|</h4></div>
       <div class='col-md-2'><h4><a href='#/linkClick'>Link clicks report</a></h4></div>
     </div> -->
-    <nav>
+    <nav ng-controller="navbarController">
       <ul class="nav nav-tabs">
         <li role="presentation"><a href="#/overall">Overall Report</a></li>
         <li role="presentation"><a href="#/pageView">Pageview Report</a></li>
         <li role="presentation"><a href="#/linkClick">Link clicks Report</a></li>
-        <li role="presentation" class="pull-right"><a href="#/login">Log In</a></li>
         <li role="presentation" class="pull-right"><a href="#/logout">Log Out</a></li>
+        <li ng-click='login()'role="presentation" class="pull-right"><a href="#/login">Log In</a></li>
         <li role="presentation" class="pull-right"><a href="#/signup">Sign Up</a></li>
       </ul>
-
-
     </nav>
 
     <div class="row" ng-view>
