@@ -203,10 +203,8 @@ module.exports = function(app, express) {
     res.header("Access-Control-Allow-Origin", "*");
     model.addressModel.findOne({domain: req.params.domain})
       .exec(function(err, addressData) {
-        if (err) {
-          console.log('error in retrieving address data');
-          res.status(500).send(err);
-        } else {
+        if (addressData) {
+          console.log('addressData', addressData);
           var locationArr = addressData.locationArray;
           if (locationArr.length >= 100) {
             locationArr.shift()
@@ -232,9 +230,12 @@ module.exports = function(app, express) {
             });
           }
           console.log('addressData', addressData);
+          res.send('address posted to array')
+        } else {
+          console.log('error in retrieving address data. Check to see if user has signed up domain in analytics');
+          res.status(500).send(err);
         }
       });
-    res.send('address posted to array')
   });
 };
 
