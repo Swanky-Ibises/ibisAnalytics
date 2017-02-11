@@ -199,43 +199,43 @@ module.exports = function(app, express) {
     });
   });
 
-  // app.post('/:domain/address', function(req, res, next) {
-  //   res.header("Access-Control-Allow-Origin", "*");
-  //   model.addressModel.findOne({domain: req.params.domain})
-  //     .exec(function(err, addressData) {
-  //       if (err) {
-  //         console.log('error in retrieving address data');
-  //         res.status(500).send(err);
-  //       } else {
-  //         var locationArr = addressData.locationArray;
-  //         if (locationArr.length >= 100) {
-  //           locationArr.shift()
-  //         }
-  //         //Checks to see if IP address is already in location array
-  //         var ipExists = false;
-  //         for (let i = 0; i < locationArr.length; i++) {
-  //           if (locationArr[i].ip === req.body.ip) {
-  //             console.log('Ip address already exists in location array, address not saved');
-  //             ipExists = true;
-  //             return;
-  //           }
-  //         }
-  //         if (!ipExists) {
-  //           locationArr.push(req.body);
-  //           addressData.save(function(err, address) {
-  //             if (err) {
-  //               console.log('error in saving new location')
-  //               res.send(err);
-  //             } else {
-  //               console.log('new location recorded');
-  //             }
-  //           });
-  //         }
-  //         console.log('addressData', addressData);
-  //       }
-  //     });
-  //   res.send('address posted to array')
-  // });
+  app.post('/:domain/address', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    model.addressModel.findOne({domain: req.params.domain})
+      .exec(function(err, addressData) {
+        if (err) {
+          console.log('error in retrieving address data');
+          res.status(500).send(err);
+        } else {
+          var locationArr = addressData.locationArray;
+          if (locationArr.length >= 100) {
+            locationArr.shift()
+          }
+          //Checks to see if IP address is already in location array
+          var ipExists = false;
+          for (let i = 0; i < locationArr.length; i++) {
+            if (locationArr[i].ip === req.body.ip) {
+              console.log('Ip address already exists in location array, address not saved');
+              ipExists = true;
+              return;
+            }
+          }
+          if (!ipExists) {
+            locationArr.push(req.body);
+            addressData.save(function(err, address) {
+              if (err) {
+                console.log('error in saving new location')
+                res.send(err);
+              } else {
+                console.log('new location recorded');
+              }
+            });
+          }
+          console.log('addressData', addressData);
+        }
+      });
+    res.send('address posted to array')
+  });
 };
 
 
