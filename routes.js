@@ -171,19 +171,19 @@ module.exports = function(app, express) {
         console.log('new pagetime model created');
       }
     });
-    // var newAddress = new model.addressModel({
-    //   username,
-    //   domain,
-    //   addressArray: []
-    // });
-    // newAddress.save(function(err, user) {
-    //   if (err) {
-    //     console.log('error in saving new address')
-    //     res.send(err);
-    //   } else {
-    //     console.log('new address model created');
-    //   }
-    // });
+    var newAddress = new model.addressModel({
+      username,
+      domain,
+      addressArray: []
+    });
+    newAddress.save(function(err, user) {
+      if (err) {
+        console.log('error in saving new address')
+        res.send(err);
+      } else {
+        console.log('new address model created');
+      }
+    });
 
     res.send('user created');
   });
