@@ -1,11 +1,42 @@
 <div ng-controller="PageTimeController">
-  {{txt}}
+  <!-- {{txt}} -->
 </div>
 
-<div ng-controller="PageTimeBarController">
-  {{msg}}
-  {{txt}}
-  <canvas id="bar" class="chart chart-bar"
-    chart-data="page_data" chart-labels="page_labels" chart-fillColor="page_colours" chart-series="page_series">
-  </canvas>
+<div class="row">
+  <div class="col-md-3 col-sm-3">
+    <span class="big">111{{NumVisit}}</span><span class="text-normal"> visits this month</span>
+  </div>
+  <div class="col-md-6 col-sm-6">
+    <div ng-controller="PageTimeLineController">
+      <canvas id="line" class="chart chart-line" chart-data="data"
+        chart-labels="labels" chart-series="series" chart-options="options"
+        chart-dataset-override="datasetOverride" chart-click="onClick">
+      </canvas>
+    </div>
+  </div>
 </div>
+
+<div class="row">
+  <div class="col-md-6 col-sm-6">
+    <div ng-controller="PageTimeBarController">
+      <canvas id="bar" class="chart chart-bar"
+        chart-data="page_data" chart-labels="page_labels" chart-fillColor="page_colours" chart-series="page_series" chart-options="page_options">
+      </canvas>
+    </div>
+  </div>
+  <div class="col-md-3 col-sm-3">
+    <div ng-controller="PageTimeDonutController">
+      <canvas id="doughnut" class="chart chart-doughnut"
+        chart-data="data" chart-labels="labels" chart-options="options">
+      </canvas>
+    </div>
+  </div>
+  <div class="col-md-3 col-sm-3">
+    <div ng-controller="PageTimeDonutController">
+      <canvas id="pie" class="chart chart-pie"
+        chart-data="data" chart-labels="labels" chart-options="options">
+      </canvas>
+    </div>
+  </div>
+</div>
+
