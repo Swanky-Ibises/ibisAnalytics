@@ -158,33 +158,85 @@ module.exports = function(app, express) {
     res.header("Access-Control-Allow-Origin", "*");
     var username = req.body.username;
     var domain = req.body.domain;
-    var newDomain = new model.pageTimeModel({
-      username: username,
-      domain: domain,
+    var newPageTime = new model.pageTimeModel({
+      username,
+      domain,
       timesArray: []
     });
-    newDomain.save(function(err, user) {
+    newPageTime.save(function(err, user) {
       if (err) {
-        console.log('error')
+        console.log('error in saving new pagetime')
         res.send(err);
       } else {
-        console.log('user created');
-        res.send(user);
+        console.log('new pagetime model created');
       }
-    })
+    });
+    var newAddress = new model.addressModel({
+      username,
+      domain,
+      addressArray: []
+    });
+    newAddress.save(function(err, user) {
+      if (err) {
+        console.log('error in saving new address')
+        res.send(err);
+      } else {
+        console.log('new address model created');
+      }
+    });
+
+    res.send('user created');
   });
 
-  app.get('/:username/pagetime', function(req, res, next) {
-    model.pageTimeModel.findOne({username: req.params.username}, function(err, time) {
+  app.get('/:domain/pagetime', function(req, res, next) {
+    model.pageTimeModel.findOne({username: req.params.domain}, function(err, time) {
       if(err) {
         console.log('error in finding username pagetimeview');
-        throw err;
+        res.status(500).send(error);
       } else {
         res.status(200).send(time);
       }
     });
   });
 
+  app.post('/:domain/address', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    model.addressModel.findOne({domain: req.params.domain})
+      .exec(function(err, addressData) {
+        if (addressData) {
+          console.log('addressData', addressData);
+          var locationArr = addressData.locationArray;
+          if (locationArr.length >= 100) {
+            locationArr.shift()
+          }
+          //Checks to see if IP address is already in location array
+          var ipExists = false;
+          for (let i = 0; i < locationArr.length; i++) {
+            if (locationArr[i].ip === req.body.ip) {
+              console.log('Ip address already exists in location array, address not saved');
+              ipExists = true;
+              return;
+            }
+          }
+          if (!ipExists) {
+            locationArr.push(req.body);
+            addressData.save(function(err, address) {
+              if (err) {
+                console.log('error in saving new location')
+                res.send(err);
+              } else {
+                console.log('new location recorded');
+              }
+            });
+          }
+          console.log('addressData', addressData);
+          res.send('address posted to array')
+        } else {
+          console.log('error in retrieving address data. Check to see if user has signed up domain in analytics');
+          res.status(500).send(err);
+        }
+      });
+  });
 };
 
 
