@@ -5,7 +5,7 @@
   <div class="col-md-5"></div>
   <div class="col-md-4">
   <button ng-hide="showAll" class="ng-hide" ng-click="setShowAll(true)">Show stats for all pages</button>
-  <button ng-show="showAll" ng-click="setShowAll(false)">Hide stats for all pages</button>
+  <!-- <button ng-show="showAll" ng-click="setShowAll(false)">Hide stats for all pages</button> -->
   </div>
 </div>
 
@@ -15,6 +15,7 @@
     <h4>{{pagename}}</h4>
     <h4>Total page views for your site:</h4>
     <div class="pageviews">{{views}}</div>
+    <!-- <span class="badge">{{views}}<span class="label label-success">total page view</span></span> -->
   </div>
 
   <!--Center featured chart -->
@@ -34,7 +35,7 @@
   </div>
 <!--Right featured chart -->
 
-<div class="col-md-4" ng-hide="hideAll">
+<!-- <div class="col-md-4" ng-hide="hideAll">
 
   <div ng-repeat="page in pageProperties">
     <h4>{{page.title}}:  {{page.count}}</h4>
@@ -44,7 +45,7 @@
     </ul>
   </div>
 
-  </div>
+  </div> -->
 
 <!--close main container-->
 </div>
