@@ -122,8 +122,70 @@ module.exports = function(app, express) {
     });
   });
 
-};
+  app.post('/pagetime', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    var storedObject = {
+      timeDifference: req.body.timeDifference,
+      location: req.body.location,
+      date: req.body.date
+    };
+    var domain = req.body.domain;
+    model.pageTimeModel.findOne({domain: domain})
+      .exec(function(err, pageTimes) {
+        if (pageTimes) {
+          if (pageTimes.timesArray.length >= 200) {
+            pageTimes.timesArray.shift();
+          }
+          pageTimes.timesArray.push(storedObject);
+          pageTimes.save(function(err, user) {
+            if (err) {
+              console.log('error in saving page');
+              res.status(500).send(err);
+            } else {
+              console.log('timesArray push success!');
+              res.send(user);
+            }
+          });
+        } else {
+          console.log('error in finding pagetime model');
+          res.send(err);
+        }
+      })
+    console.log('this object', storedObject);
+  });
 
+  app.post('/create', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    var username = req.body.username;
+    var domain = req.body.domain;
+    var newDomain = new model.pageTimeModel({
+      username: username,
+      domain: domain,
+      timesArray: []
+    });
+    newDomain.save(function(err, user) {
+      if (err) {
+        console.log('error')
+        res.send(err);
+      } else {
+        console.log('user created');
+        res.send(user);
+      }
+    })
+  });
+
+  app.get('/:username/pagetime', function(req, res, next) {
+    model.pageTimeModel.findOne({username: req.params.username}, function(err, time) {
+      if(err) {
+        console.log('error in finding username pagetimeview');
+        throw err;
+      } else {
+        res.status(200).send(time);
+      }
+    });
+  });
+
+};
 
 
 

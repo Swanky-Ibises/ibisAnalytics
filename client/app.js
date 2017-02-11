@@ -5,8 +5,12 @@ angular.module('sharkanalytics',
   'sharkanalyticss.linkClickPlotly',
   'sharkanalytics.pageViewPlotly',
   'pagetimeChartJs',
-  'ngRoute'])
-
+  'ngRoute',
+  'angular-jwt',
+  'auth0',
+  'angular-storage',
+  'ui.router'
+  ])
 .config(function ($routeProvider, $httpProvider) {
   $routeProvider
     .when('/pageView', {
