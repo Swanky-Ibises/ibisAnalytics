@@ -186,7 +186,5 @@ module.exports = function(app, express) {
   });
 };
 
-// {"domain":"bman","timeDifference": "250087","location": "checkout","date": "2017-02-11T07:04:03.740Z" }
-
 
 
