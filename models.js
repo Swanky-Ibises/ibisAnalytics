@@ -17,7 +17,7 @@ var pageViewSchema = mongoose.Schema({
 });
 
 var pageTimeSchema = mongoose.Schema({
-  google: String,
+  username: String,
   domain: String,
   timesArray: Array
 });

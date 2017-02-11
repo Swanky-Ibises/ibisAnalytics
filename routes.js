@@ -142,24 +142,24 @@ module.exports = function(app, express) {
               console.log('error in saving page');
               res.status(500).send(err);
             } else {
-              console.log('hello world');
-              // res.send('user');
+              console.log('timesArray push success!');
+              res.send(user);
             }
           });
         } else {
-          console.log('cannot find model');
+          console.log('error in finding pagetime model');
+          res.send(err);
         }
       })
     console.log('this object', storedObject);
-    res.send('pageTime got');
   });
 
   app.post('/create', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    var google = req.body.google;
+    var username = req.body.username;
     var domain = req.body.domain;
     var newDomain = new model.pageTimeModel({
-      google: google,
+      username: username,
       domain: domain,
       timesArray: []
     });
@@ -169,21 +169,22 @@ module.exports = function(app, express) {
         res.send(err);
       } else {
         console.log('user created');
-        res.send('user created');
+        res.send(user);
       }
     })
   });
 
-  app.post('/pagetimeview', function(req, res, next) {
-    var google = req.body.google;
-    model.pageTimeModel.findOne({google: google}, function(err, time) {
+  app.get('/:username/pagetime', function(req, res, next) {
+    model.pageTimeModel.findOne({username: req.params.username}, function(err, time) {
       if(err) {
+        console.log('error in finding username pagetimeview');
         throw err;
       } else {
         res.status(200).send(time);
       }
     });
   });
+
 };
 
 
