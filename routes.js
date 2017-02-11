@@ -215,6 +215,7 @@ module.exports = function(app, express) {
             if (locationArr[i].ip === req.body.ip) {
               console.log('Ip address already exists in location array, address not saved');
               ipExists = true;
+              res.send('Ip address already exists in location array, address not saved');
               return;
             }
           }
@@ -228,9 +229,9 @@ module.exports = function(app, express) {
                 console.log('new location recorded');
               }
             });
+            res.send('address posted to array')
           }
           console.log('addressData', addressData);
-          res.send('address posted to array')
         } else {
           console.log('error in retrieving address data. Check to see if user has signed up domain in analytics');
           res.status(500).send(err);
