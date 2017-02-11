@@ -201,3 +201,13 @@ footer a:link, footer a:visited {
   width: 148px;
   height: 110px;
   }
+
+  /*new CSS*/
+.big {
+  font-size: 200%;
+  font-weight: 800;
+  color: red;
+}
+.text-normal {
+  font-weight: 800;
+}

@@ -11,34 +11,40 @@
 </div>
 
 <!--main page content-->
-<div class = "row container-fluid">
+<div class = "container-fluid">
 <!--Left side overview
 Displays identical summary information for page regardless of which
 visualization is selected-->
-  <div class="col-md-2">
-    <h4>{{ pagename }}</h4>
-    <h4>Total clicks on your site:</h4>
-    <div class="linkclicks">{{clicks}}</div>
+  <div class="row">
+    <div class="col-md-2 col-md-offset-4">
+    <div><span class="big">{{ clicks }}</span><span class="text-normal"> Total Clicks</span></div>
+    </div>
   </div>
 
 <!--Center featured chart -->
-  <div class="col-md-6">
-    <h4 align='center'>Link Clicks</h4>
-    <div ng-controller='linkClickVisualsController'>
-      <line-plot width=300, height=200>
-    </div><br><br>
-    <h4 align='center'>Percentage of Total Clicks</h4>
-    <div ng-controller='linkClickPieController'>
-      <line-plot width=300, height=200>
-    </div><br><br>
-    <h4 align='center'>Total Clicks Per Day</h4>
-    <div ng-controller='linkClickDayController'>
-      <line-plot width=300, height=200>
-    </div><br><br>
-   <!--  <h4 align='center'>Link Clicks in Order</h4>
-    <div ng-controller='linkClickLineController'>
-      <line-plot width=300, height=200>
-    </div><br> -->
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <h4 align='center'>Link Clicks</h4>
+      <div ng-controller='linkClickVisualsController'>
+        <line-plot width=500, height=300>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <h4 align='center'>Percentage of Total Clicks</h4>
+      <div ng-controller='linkClickPieController'>
+        <line-plot width=500, height=300>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4">
+      <h4 align='center'>Total Clicks Per Day</h4>
+      <div ng-controller='linkClickDayController'>
+        <line-plot width=400, height=300>
+      </div>
+    </div>
   </div>
 
 

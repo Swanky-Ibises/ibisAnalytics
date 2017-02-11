@@ -12,7 +12,11 @@ angular.module('sharkanalyticss.linkClickPlotly', [])
           allUrls.push(item.url); // Push the url and the count properties onto their relevant arrays.
           allCounts.push(item.count);
         })
-        $scope.data = {x: allUrls, y: allCounts, type: 'bar'}; // Set our bar graph parameters within an object...
+        $scope.data = {
+        x: allUrls,
+        y: allCounts,
+        type: 'bar'
+        }; // Set our bar graph parameters within an object...
         $scope.data = [$scope.data]; // and store it-as Plotly requires-within an array.
       });
   };
@@ -62,8 +66,8 @@ angular.module('sharkanalyticss.linkClickPlotly', [])
         response.data.forEach(function(item) { // For each element within the data...
           item.date.forEach(function(element) { // For each date within the element...
             allDates.push(element); // Push date onto allDates
-          })
-        })
+          });
+        });
         allDates.forEach(function(day) { // For each day within allDates...
           var day = day.slice(4,10); // Slice off the relevant substring: for example, "Feb 06"
           if(dates[day]) { // If we already have an entry for this day within dates...
@@ -71,7 +75,7 @@ angular.module('sharkanalyticss.linkClickPlotly', [])
           } else { // If not, instantiate it to one.
             dates[day] = 1;
           }
-        })
+        });
         var days = Object.keys(dates);
         for (var key in dates) {
           everyDay.push(dates[key]); // Push the date "counts" into everyDay for plotting.
@@ -111,9 +115,9 @@ angular.module('sharkanalyticss.linkClickPlotly', [])
   function linkFunc(scope, element, attrs) {
       scope.$watch('data', function (plots) {
         var layout = {
-          width: 600,
-          height: 300,
-          margin: { 't': 40, 'b':20, 'l':40, 'r':0 },
+          width: attrs.width,
+          height: attrs.height,
+          //margin: { 't': 40, 'b':20, 'l':40, 'r':0 },
         };
 
       Plotly.newPlot(element[0], plots, layout);
@@ -132,8 +136,8 @@ angular.module('sharkanalyticss.linkClickPlotly', [])
   function linkFunc(scope, element, attrs) {
       scope.$watch('data', function (plots) {
         var layout = {
-          width: 400,
-          height: 200,
+          width: attrs.width,
+          height: attrs.height,
           margin: { 't': 40, 'b':20, 'l':40, 'r':0 },
         };
 
@@ -146,4 +150,4 @@ angular.module('sharkanalyticss.linkClickPlotly', [])
       link: linkFunc
   };
 
-})
+});
