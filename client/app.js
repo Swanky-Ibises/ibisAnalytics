@@ -1,9 +1,10 @@
 angular.module('sharkanalytics',
-  ['sharkanalytics.pageView',
+  ["chart.js",'sharkanalytics.pageView',
   'sharkanalytics.linkClick',
   'sharkanalytics.factory',
   'sharkanalyticss.linkClickPlotly',
   'sharkanalytics.pageViewPlotly',
+  'pagetimeChartJs',
   'ngRoute'])
 
 .config(function ($routeProvider, $httpProvider) {
@@ -20,7 +21,11 @@ angular.module('sharkanalytics',
       templateUrl: 'app/overall/overall.html',
       controller: 'linkClickVisualsController'
     })
+    .when('/homepage', {
+      templateUrl: 'app/overall/homepage.html',
+      controller: 'PageTimeController'
+    })
     .otherwise({
       redirectTo: '/'
-    })
-  })
+    });
+  });

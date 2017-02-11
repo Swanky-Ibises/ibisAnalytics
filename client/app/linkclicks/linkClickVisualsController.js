@@ -136,8 +136,8 @@ angular.module('sharkanalyticss.linkClickPlotly', [])
   function linkFunc(scope, element, attrs) {
       scope.$watch('data', function (plots) {
         var layout = {
-          width: attrs.width,
-          height: attrs.height,
+          width: 400,
+          height: 200,
           margin: { 't': 40, 'b':20, 'l':40, 'r':0 },
         };
 

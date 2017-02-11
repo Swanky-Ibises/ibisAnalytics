@@ -23,6 +23,7 @@ app.use(bodyParser.json());
 
 //set app to render static files
 app.use(express.static(path.join(__dirname, 'client')));
+app.use('/scripts', express.static(path.join(__dirname, 'node_modules')));
 
 //connect routes
 routes(app, express);
