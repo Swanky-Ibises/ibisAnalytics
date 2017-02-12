@@ -17,13 +17,11 @@ var pageViewSchema = mongoose.Schema({
 });
 
 var pageTimeSchema = mongoose.Schema({
-  username: String,
   domain: String,
   timesArray: Array
 });
 
 var addressSchema = mongoose.Schema({
-  username: String,
   domain: String,
   locationArray: Array
 });

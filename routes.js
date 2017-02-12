@@ -148,32 +148,40 @@ module.exports = function(app, express) {
     var domain = req.body.domain;
     console.log('domain',domain);
     model.pageTimeModel.findOne({domain: domain})
-      .exec(function(err, pageTimes) {
-        if (pageTimes) {
-          if (pageTimes.timesArray.length >= 200) {
-            pageTimes.timesArray.shift();
-          }
-          pageTimes.timesArray.push(storedObject);
-          saveNewModel(pageTimes, 'new pageTime data');
-          // res.send('new pagetime data posted');
-        } else {
-          console.log('error in finding pagetime model');
-          res.send(err);
+    .exec(function(err, pageTimes) {
+      if (pageTimes) {
+        if (pageTimes.timesArray.length >= 200) {
+          pageTimes.timesArray.shift();
         }
-      });
+        pageTimes.timesArray.push(storedObject);
+        saveNewModel(pageTimes, 'new pageTime data');
+        // res.send('new pagetime data posted');
+      } else {
+        console.log('error in finding pagetime model');
+        res.send(err);
+      }
+    });
     var title = req.body.newLocation;
     if (title) {
       model.pageViewModel.findOne({title: title})
-        .exec(function(err, pageView) {
-          if (pageView) {
-            pageView.count++;
-            pageView.date.push(req.body.date);
-            saveNewModel(pageView, 'new pageView increment');
-          } else {
-            console.log('need to create new pageView')
-          }
-        });
+      .exec(function(err, pageView) {
+        if (pageView) {
+          pageView.count++;
+          pageView.date.push(req.body.date);
+          saveNewModel(pageView, 'new pageView increment');
+        } else {
+          model.pageViewModel.create({title, count:1, date:[date]}, function(err, pageView) {
+            if (err) {
+              console.log('error in creating pageView model');
+              res.send(err);
+            } else {
+              console.log('Successfully created pageView model');
+            }
+          });
+        }
+      });
     }
+
     console.log('this object', storedObject);
   });
 
