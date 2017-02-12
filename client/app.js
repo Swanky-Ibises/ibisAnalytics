@@ -1,26 +1,24 @@
-angular
-.module('sharkanalytics',
-  ['sharkanalytics.pageView',
+angular.module('sharkanalytics',
+  ["chart.js",'sharkanalytics.pageView',
+
   'sharkanalytics.linkClick',
   'sharkanalytics.factory',
   'sharkanalyticss.linkClickPlotly',
   'sharkanalytics.pageViewPlotly',
+  'pagetimeChartJs',
   'ngRoute',
   'angular-jwt',
   'auth0',
   'angular-storage',
   'ui.router'
   ])
-
 .config(function ($routeProvider, $httpProvider, authProvider, $locationProvider) {
   $locationProvider.html5Mode(false).hashPrefix('');
-
-  console.log(authProvider)
+  console.log(authProvider);
   authProvider.init({
     domain: 'swanky-ibises.auth0.com',
     clientID: '9ZbTuQ2rS1kaqKXEDq3oBaRuOAGldqvQ'
   });
-
   $routeProvider
     .when('/pageView', {
       templateUrl: 'app/pageview/pageView.html',
@@ -34,9 +32,17 @@ angular
       templateUrl: 'app/overall/overall.html',
       controller: 'linkClickVisualsController'
     })
+    .when('/overview', {
+      templateUrl: 'app/overall/overview.html',
+      controller: 'PageTimeController'
+    })
+    .when('/', {
+      templateUrl: 'app/overall/homepage.html',
+      controller: ''
+    })
     .otherwise({
       redirectTo: '/'
-    })
+    });
   })
 
 .controller('navbarController', function($scope, auth, store){
@@ -52,5 +58,6 @@ angular
         console.log(err);
       }
     );
-  }
+  };
 });
+
