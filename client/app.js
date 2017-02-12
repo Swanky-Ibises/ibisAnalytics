@@ -45,19 +45,31 @@ angular.module('sharkanalytics',
     });
   })
 
-.controller('navbarController', function($scope, auth, store){
-  $scope.login = function(){
+.controller('headerController', function($scope, auth, store, $location){
+  
+  $scope.login = function() {
     console.log(auth);
     console.log(store);
     auth.signin({},
-      function(profile, token){
+      function(profile, token) {
         store.set("profile", profile);
         store.set("webToken", token);
+        $location.path('/overview');
+        $scope.loggedIn = auth.isAuthenticated;
       },
       function(err){
         console.log(err);
       }
     );
   };
+
+  $scope.logout = function() {
+    store.remove('profile');
+    store.remove('webToken');
+    auth.signout();
+    $scope.loggedIn = auth.isAuthenticated;
+    $location.path('/');
+  }
 });
+
 
