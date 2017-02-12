@@ -11,7 +11,8 @@ angular.module('sharkanalytics',
   'angular-storage',
   'ui.router'
   ])
-.config(function ($routeProvider, $httpProvider) {
+ .config(function ($routeProvider, $httpProvider, authProvider, $locationProvider) {
+  $locationProvider.html5Mode(false).hashPrefix('');
   $routeProvider
     .when('/pageView', {
       templateUrl: 'app/pageview/pageView.html',
@@ -25,9 +26,13 @@ angular.module('sharkanalytics',
       templateUrl: 'app/overall/overall.html',
       controller: 'linkClickVisualsController'
     })
-    .when('/homepage', {
-      templateUrl: 'app/overall/homepage.html',
+    .when('/overview', {
+      templateUrl: 'app/overall/overview.html',
       controller: 'PageTimeController'
+    })
+    .when('/', {
+      templateUrl: 'app/overall/homepage.html',
+      controller: ''
     })
     .otherwise({
       redirectTo: '/'
