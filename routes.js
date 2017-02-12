@@ -19,7 +19,7 @@ module.exports = function(app, express) {
   //GET request for all data
   app.get('/linkClickAll', function(req, res) {
     //find all urls in database
-    model.linkClickModel.find({domain}, function(err, links) {
+    model.linkClickModel.find({}, function(err, links) {
       if(err) {
         throw err;
       } else {
@@ -60,32 +60,44 @@ module.exports = function(app, express) {
     res.header("Access-Control-Allow-Origin", "*");
     //pull url from request body
     var url = req.body.url;
+    var domain = req.body.domain;
     console.log('url for link click', req.body);
     //create new timestamp
     var date = Date();
     //check if url exists in database
-    model.linkClickModel.findOne({url: url}, function(err, link) {
-      //if it exists, update count and add timestamp
-      if(link) {
-        link.count++;
-        link.date.push(date);
-        link.save();
-        res.status(200).send("Successfully updated link count")
-      //if not, create new record, set count to 1 and add timestamp (in array)
+    model.linkClickModel.find({domain})
+    .exec(function(err, links) {
+      if (err) {
+        console.log('error in retrieving links from domain');
+        res.send(err);
       } else {
-        model.linkClickModel.create({
-          url: url,
-          count: 1,
-          date: [date]
-        }, function(err) {
-          if(err) {
-            throw err;
+        model.linkClickModel.findOne({url: url})
+        .exec(function(err, link) {
+          if(link) {
+            link.count++;
+            link.date.push(date);
+            link.save();
+            console.log("Successfully updated link count");
+            res.status(200).send("Successfully updated link count")
+          //if not, create new record, set count to 1 and add timestamp (in array)
           } else {
-            res.status(200).send("Successfully created new link record");
+            model.linkClickModel.create({
+              url: url,
+              count: 1,
+              date: [date]
+            }, function(err) {
+              if(err) {
+                throw err;
+              } else {
+                console.log("Successfully created new link record");
+                res.status(200).send("Successfully created new link record");
+              }
+            });
           }
-        });
+        })
       }
     });
+      //if it exists, update count and add timestamp
   });
 
   // app.post('/:domain/linkClick', function(req, res) {
