@@ -10,11 +10,9 @@ angular.module('sharkanalytics',
   'angular-jwt',
   'auth0',
   'angular-storage',
-  'ui.router'
   ])
 .config(function ($routeProvider, $httpProvider, authProvider, $locationProvider) {
   $locationProvider.html5Mode(false).hashPrefix('');
-  console.log(authProvider);
   authProvider.init({
     domain: 'swanky-ibises.auth0.com',
     clientID: '9ZbTuQ2rS1kaqKXEDq3oBaRuOAGldqvQ'
@@ -45,17 +43,14 @@ angular.module('sharkanalytics',
     });
   })
 
-.controller('headerController', function($scope, auth, store, $location){
+.controller('headerController', function($scope, auth, store, $location, $rootScope){
   
   $scope.login = function() {
-    console.log(auth);
-    console.log(store);
     auth.signin({},
       function(profile, token) {
         store.set("profile", profile);
         store.set("webToken", token);
         $location.path('/overview');
-        $scope.loggedIn = auth.isAuthenticated;
       },
       function(err){
         console.log(err);
@@ -67,9 +62,24 @@ angular.module('sharkanalytics',
     store.remove('profile');
     store.remove('webToken');
     auth.signout();
-    $scope.loggedIn = auth.isAuthenticated;
     $location.path('/');
   }
+})
+
+.run(function($rootScope, auth, store, jwtHelper, $location) {
+  $rootScope.$on("$locationChangeStart", function() {
+
+    var token = store.get("webToken");
+    if(token) {
+      if(!jwtHelper.isTokenExpired(token)) {
+        if(!auth.isAuthenticated) {
+          auth.authenticate(store.get("profile"), token);
+        }
+      }
+    } else {
+      $location.path('/');
+    }
+  })
 });
 
 
