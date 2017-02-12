@@ -1,6 +1,17 @@
 //require schemas from Models folder
 var model = require('./models.js')
 
+//function for saving the model to the database
+var saveNewModel = function(model, modelName) {
+  model.save(function(err, user) {
+    if (err) {
+      console.log('error in saving new', modelName);
+      res.send(err);
+    } else {
+      console.log(`new ${modelName} created`);
+    }
+  });
+}
 //export routes to app file
 module.exports = function(app, express) {
 
@@ -141,15 +152,8 @@ module.exports = function(app, express) {
             pageTimes.timesArray.shift();
           }
           pageTimes.timesArray.push(storedObject);
-          pageTimes.save(function(err, user) {
-            if (err) {
-              console.log('error in saving page');
-              res.status(500).send(err);
-            } else {
-              console.log('timesArray push success!');
-              res.send(user);
-            }
-          });
+          saveNewModel(pageTimes, 'new pageTime data');
+          res.send('new pagetime data posted');
         } else {
           console.log('error in finding pagetime model');
           res.send(err);
@@ -158,38 +162,33 @@ module.exports = function(app, express) {
     console.log('this object', storedObject);
   });
 
+
   app.post('/create', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     var username = req.body.username;
     var domain = req.body.domain;
     console.log('req.body.domain',req.body);
+    // model.pageTimeModel.findOne({username: username})
+    // .exec(function(err, pageTimes) {
+    //   if (!pageTimes) {
+    //   } else {
+    //     console.log(`username: ${username} already exists in the database. new username not saved`);
+    //     res.send(`username: ${username} already exists in the database. new username not saved`)
+    //   }
+    // });
     var newPageTime = new model.pageTimeModel({
       username,
       domain,
       timesArray: []
     });
-    newPageTime.save(function(err, user) {
-      if (err) {
-        console.log('error in saving new pagetime');
-        res.send(err);
-      } else {
-        console.log('new pagetime model created', username, domain);
-      }
-    });
+    saveNewModel(newPageTime, 'pageTime model');
     var newAddress = new model.addressModel({
       username,
       domain,
       addressArray: []
     });
-    newAddress.save(function(err, user) {
-      if (err) {
-        console.log('error in saving new address');
-        res.send(err);
-      } else {
-        console.log('new address model created');
-      }
-    });
-
+    saveNewModel(newAddress, 'address model');
+    console.log(`created a model for username: ${username} , domain: ${domain}`);
     res.send('user created');
   });
 
@@ -226,14 +225,7 @@ module.exports = function(app, express) {
           }
           if (!ipExists) {
             locationArr.push(req.body);
-            addressData.save(function(err, address) {
-              if (err) {
-                console.log('error in saving new location');
-                res.send(err);
-              } else {
-                console.log('new location recorded');
-              }
-            });
+            saveNewModel(addressData, 'new location added');
             res.send('address posted to array');
           }
           console.log('addressData', addressData);
