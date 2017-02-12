@@ -29,6 +29,9 @@ angular.module('pagetimeChartJs',[])
       display: true,
       text: 'Percentage of Time Spent on Pages'
     },
+    layout:{
+      padding: 5
+    }
   };
 })
 .controller('linkClickChartJsController', function($scope) {
@@ -40,6 +43,9 @@ angular.module('pagetimeChartJs',[])
       display: true,
       text: 'Percentage of Clicks on Each Link'
     },
+    layout:{
+      padding: 5
+    }
   };
 })
 .controller('PageTimeLineController', function($scope) {
@@ -69,6 +75,9 @@ angular.module('pagetimeChartJs',[])
           position: 'right'
         }
       ]
+    },
+    layout:{
+      padding: 5
     }
   };
 });
