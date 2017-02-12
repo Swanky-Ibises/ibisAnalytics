@@ -1,6 +1,17 @@
 //require schemas from Models folder
 var model = require('./models.js')
 
+//function for saving the model to the database
+var saveNewModel = function(model, modelName) {
+  model.save(function(err, user) {
+    if (err) {
+      console.log('error in saving new', modelName);
+      res.send(err);
+    } else {
+      console.log(`new ${modelName} created`);
+    }
+  });
+}
 //export routes to app file
 module.exports = function(app, express) {
 
@@ -158,16 +169,6 @@ module.exports = function(app, express) {
     console.log('this object', storedObject);
   });
 
-  var saveNewModel = function(model, modelName) {
-    model.save(function(err, user) {
-      if (err) {
-        console.log('error in saving new', modelName);
-        res.send(err);
-      } else {
-        console.log(`new ${modelName} created`);
-      }
-    });
-  }
 
   app.post('/create', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
