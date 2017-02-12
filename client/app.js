@@ -12,7 +12,8 @@ angular
   'ui.router'
   ])
 
-.config(function ($routeProvider, $httpProvider, authProvider) {
+.config(function ($routeProvider, $httpProvider, authProvider, $locationProvider) {
+  $locationProvider.html5Mode(false).hashPrefix('');
 
   console.log(authProvider)
   authProvider.init({
@@ -42,7 +43,7 @@ angular
   $scope.login = function(){
     console.log(auth);
     console.log(store);
-    auth.signin({}, 
+    auth.signin({},
       function(profile, token){
         store.set("profile", profile);
         store.set("webToken", token);
