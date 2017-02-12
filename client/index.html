@@ -56,14 +56,14 @@
       <div class='col-md-2'><h4><a href='#/linkClick'>Link clicks report</a></h4></div>
     </div> -->
     <div ng-controller="headerController">
-    <h3 ng-if="loggedIn">  Welcome CompanyName</h3>
+    <h3 ng-if="$root.isAuthenticated">  Welcome CompanyName</h3>
     <nav>
       <ul class="nav nav-tabs">
-        <li ng-if="loggedIn" role="presentation"><a href="#/overview">Overview</a></li>
-        <li ng-if="loggedIn" role="presentation"><a href="#/pageView">Page View Report</a></li>
-        <li ng-if="loggedIn" role="presentation"><a href="#/linkClick">Link Clicks Report</a></li>
-        <li ng-if="loggedIn" ng-click='logout()' role="presentation" class="pull-right"><a href="#/logout">Log Out</a></li>
-        <li ng-if="!loggedIn" ng-click='login()' role="presentation" class="pull-right"><a href="#/login">Log In</a></li>
+        <li ng-if="$root.isAuthenticated" role="presentation"><a href="#/overview">Overview</a></li>
+        <li ng-if="$root.isAuthenticated" role="presentation"><a href="#/pageView">Page View Report</a></li>
+        <li ng-if="$root.isAuthenticated" role="presentation"><a href="#/linkClick">Link Clicks Report</a></li>
+        <li ng-if="$root.isAuthenticated" ng-click='logout()' role="presentation" class="pull-right"><a href="#/logout">Log Out</a></li>
+        <li ng-if="!$root.isAuthenticated" ng-click='login()' role="presentation" class="pull-right"><a href="#/login">Log In</a></li>
       </ul>
     </nav>
     </div>
