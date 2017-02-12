@@ -95,18 +95,21 @@ module.exports = function(app, express) {
     res.header("Access-Control-Allow-Origin", "*");
     //pull title from request body
     var title = req.body.title;
+    console.log('new title received', title);
     //create new timestamp
     var date = Date();
     //check if title exists in database
     model.pageViewModel.findOne({title: title}, function(err, page) {
+      console.log('existing title',title);
       //if it exists, update count and add timestamp
       if(page) {
         page.count++;
         page.date.push(date);
         page.save();
-        res.status(200).send("Successfully updated page count")
+        res.status(200).send("Successfully updated page count");
       //if not, create new record, set count to 1 and add timestamp (in array)
       } else {
+        console.log('new title',title);
         model.pageViewModel.create({
           title: title,
           count: 1,
@@ -130,6 +133,7 @@ module.exports = function(app, express) {
       date: req.body.date
     };
     var domain = req.body.domain;
+    console.log('domain',domain);
     model.pageTimeModel.findOne({domain: domain})
       .exec(function(err, pageTimes) {
         if (pageTimes) {
@@ -150,7 +154,7 @@ module.exports = function(app, express) {
           console.log('error in finding pagetime model');
           res.send(err);
         }
-      })
+      });
     console.log('this object', storedObject);
   });
 
@@ -158,6 +162,7 @@ module.exports = function(app, express) {
     res.header("Access-Control-Allow-Origin", "*");
     var username = req.body.username;
     var domain = req.body.domain;
+    console.log('req.body.domain',req.body);
     var newPageTime = new model.pageTimeModel({
       username,
       domain,
@@ -165,10 +170,10 @@ module.exports = function(app, express) {
     });
     newPageTime.save(function(err, user) {
       if (err) {
-        console.log('error in saving new pagetime')
+        console.log('error in saving new pagetime');
         res.send(err);
       } else {
-        console.log('new pagetime model created');
+        console.log('new pagetime model created', username, domain);
       }
     });
     var newAddress = new model.addressModel({
@@ -178,7 +183,7 @@ module.exports = function(app, express) {
     });
     newAddress.save(function(err, user) {
       if (err) {
-        console.log('error in saving new address')
+        console.log('error in saving new address');
         res.send(err);
       } else {
         console.log('new address model created');
@@ -189,9 +194,9 @@ module.exports = function(app, express) {
   });
 
   app.get('/:domain/pagetime', function(req, res, next) {
-    model.pageTimeModel.findOne({username: req.params.domain}, function(err, time) {
+    model.pageTimeModel.findOne({domain: req.params.domain}, function(err, time) {
       if(err) {
-        console.log('error in finding username pagetimeview');
+        console.log('error in finding domain pagetimeview');
         res.status(500).send(error);
       } else {
         res.status(200).send(time);
@@ -207,7 +212,7 @@ module.exports = function(app, express) {
           console.log('addressData', addressData);
           var locationArr = addressData.locationArray;
           if (locationArr.length >= 100) {
-            locationArr.shift()
+            locationArr.shift();
           }
           //Checks to see if IP address is already in location array
           var ipExists = false;
@@ -223,13 +228,13 @@ module.exports = function(app, express) {
             locationArr.push(req.body);
             addressData.save(function(err, address) {
               if (err) {
-                console.log('error in saving new location')
+                console.log('error in saving new location');
                 res.send(err);
               } else {
                 console.log('new location recorded');
               }
             });
-            res.send('address posted to array')
+            res.send('address posted to array');
           }
           console.log('addressData', addressData);
         } else {
