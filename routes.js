@@ -152,15 +152,8 @@ module.exports = function(app, express) {
             pageTimes.timesArray.shift();
           }
           pageTimes.timesArray.push(storedObject);
-          pageTimes.save(function(err, user) {
-            if (err) {
-              console.log('error in saving page');
-              res.status(500).send(err);
-            } else {
-              console.log('timesArray push success!');
-              res.send(user);
-            }
-          });
+          saveNewModel(pageTimes, 'new pageTime data');
+          res.send('new pagetime data posted');
         } else {
           console.log('error in finding pagetime model');
           res.send(err);
@@ -232,14 +225,7 @@ module.exports = function(app, express) {
           }
           if (!ipExists) {
             locationArr.push(req.body);
-            addressData.save(function(err, address) {
-              if (err) {
-                console.log('error in saving new location');
-                res.send(err);
-              } else {
-                console.log('new location recorded');
-              }
-            });
+            saveNewModel(addressData, 'new location added');
             res.send('address posted to array');
           }
           console.log('addressData', addressData);
