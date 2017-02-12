@@ -104,9 +104,10 @@ module.exports = function(app, express) {
   //POST request
   app.post('/pageView', function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
+    console.log('NEW POST TO PAGEVIEW');
     //pull title from request body
     var title = req.body.title;
-    console.log('new title received', title);
+    console.log('NEW TITLE RECIEVED', title);
     //create new timestamp
     var date = Date();
     //check if title exists in database
@@ -138,6 +139,7 @@ module.exports = function(app, express) {
 
   app.post('/pagetime', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    console.log('new location', req.body.newLocation);
     var storedObject = {
       timeDifference: req.body.timeDifference,
       location: req.body.location,
@@ -153,12 +155,25 @@ module.exports = function(app, express) {
           }
           pageTimes.timesArray.push(storedObject);
           saveNewModel(pageTimes, 'new pageTime data');
-          res.send('new pagetime data posted');
+          // res.send('new pagetime data posted');
         } else {
           console.log('error in finding pagetime model');
           res.send(err);
         }
       });
+    var title = req.body.newLocation;
+    if (title) {
+      model.pageViewModel.findOne({title: title})
+        .exec(function(err, pageView) {
+          if (pageView) {
+            pageView.count++;
+            pageView.date.push(req.body.date);
+            saveNewModel(pageView, 'new pageView increment');
+          } else {
+            console.log('need to create new pageView')
+          }
+        });
+    }
     console.log('this object', storedObject);
   });
 
