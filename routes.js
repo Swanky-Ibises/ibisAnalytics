@@ -19,7 +19,7 @@ module.exports = function(app, express) {
   //GET request for all data
   app.get('/linkClickAll', function(req, res) {
     //find all urls in database
-    model.linkClickModel.find({}, function(err, links) {
+    model.linkClickModel.find({domain}, function(err, links) {
       if(err) {
         throw err;
       } else {
@@ -27,6 +27,19 @@ module.exports = function(app, express) {
       }
     });
   });
+
+  // app.get('/:domain/linkClickAll', function(req, res) {
+  //   //find all urls in database
+  //   var domain = req.params.domain;
+  //   model.linkClickModel.find({domain})
+  //   .exec(function(err, linkClicks) {
+  //     if (err) {
+  //       console.log('error in fetching all link clicks for ', domain);
+  //     } else {
+  //       res.status(200).send(linkClicks);
+  //     }
+  //   });
+  // });
 
   //GET request for a specified url
   app.get('/linkClick', function(req, res) {
@@ -47,6 +60,7 @@ module.exports = function(app, express) {
     res.header("Access-Control-Allow-Origin", "*");
     //pull url from request body
     var url = req.body.url;
+    console.log('url for link click', req.body);
     //create new timestamp
     var date = Date();
     //check if url exists in database
@@ -73,6 +87,11 @@ module.exports = function(app, express) {
       }
     });
   });
+
+  // app.post('/:domain/linkClick', function(req, res) {
+  //   // model.linkClickModel.findOne({domain}, fun)
+  //   console.log(req.body.url)
+  // });
 
   /* pageView route */
   //GET request for a specified page
@@ -104,10 +123,8 @@ module.exports = function(app, express) {
   //POST request
   app.post('/pageView', function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
-    console.log('NEW POST TO PAGEVIEW');
     //pull title from request body
     var title = req.body.title;
-    console.log('NEW TITLE RECIEVED', title);
     //create new timestamp
     var date = Date();
     //check if title exists in database
@@ -162,6 +179,7 @@ module.exports = function(app, express) {
       }
     });
     var title = req.body.newLocation;
+    var date = Date();
     if (title) {
       model.pageViewModel.findOne({title: title})
       .exec(function(err, pageView) {
@@ -170,7 +188,7 @@ module.exports = function(app, express) {
           pageView.date.push(req.body.date);
           saveNewModel(pageView, 'new pageView increment');
         } else {
-          model.pageViewModel.create({title, count:1, date:[date]}, function(err, pageView) {
+          model.pageViewModel.create({title, count:1, date: [date]}, function(err, pageView) {
             if (err) {
               console.log('error in creating pageView model');
               res.send(err);
@@ -181,37 +199,32 @@ module.exports = function(app, express) {
         }
       });
     }
-
     console.log('this object', storedObject);
   });
 
 
   app.post('/create', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    var username = req.body.username;
+    var email = req.body.email;
     var domain = req.body.domain;
+    var newUser = new model.userModel({
+      email,
+      domain
+    });
+    saveNewModel(newUser, 'new user model');
     console.log('req.body.domain',req.body);
-    // model.pageTimeModel.findOne({username: username})
-    // .exec(function(err, pageTimes) {
-    //   if (!pageTimes) {
-    //   } else {
-    //     console.log(`username: ${username} already exists in the database. new username not saved`);
-    //     res.send(`username: ${username} already exists in the database. new username not saved`)
-    //   }
-    // });
     var newPageTime = new model.pageTimeModel({
-      username,
       domain,
       timesArray: []
     });
     saveNewModel(newPageTime, 'pageTime model');
     var newAddress = new model.addressModel({
-      username,
       domain,
       addressArray: []
     });
     saveNewModel(newAddress, 'address model');
-    console.log(`created a model for username: ${username} , domain: ${domain}`);
+    console.log(`created a model for username: ${email} , domain: ${domain}`);
+    var newLink
     res.send('user created');
   });
 
