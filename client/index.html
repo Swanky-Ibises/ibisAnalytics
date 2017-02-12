@@ -17,6 +17,8 @@
     <!--Importing plot.ly and d3-->
     <script src = "https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src = "https://d3js.org/d3.v4.min.js"></script>
+    <script src="/scripts/chart.js/dist/Chart.bundle.min.js"></script>
+    <script src="/scripts/angular-chart.js/dist/angular-chart.min.js"></script>
     <script src = "app.js"></script>
      <!--Import pageViewController and pageViewVisualsController-->
     <script src = "./app/pageview/pageViewController.js"></script>
@@ -26,20 +28,22 @@
     <script src = "./app/linkclicks/linkClickVisualsController.js"></script>
      <!--Import factory.js file-->
     <script src = "./app/factory.js"></script>
+    <!-- Import the PageTime Controller -->
+    <script src = "./app/pagetime/pageTimeController.js"></script>
   </head>
 
   <body>
-  <a href="http://hackreactor.com">
+<!--   <a href="http://hackreactor.com">
   <img style="position: fixed; top: 0; right: 0; border: 0;" src="http://i.imgur.com/x86kKmF.png" alt="Built at Hack Reactor">
   </a>
-
+ -->
    <!--Bootstrap container wrapper-->
-  <div class="container-fluid">
+
 
   <!--Site header-->
-    <div class="top-banner" height=30px>
+<!--     <div class="top-banner" height=30px>
       <h1><img src='./images/tiger_shark_and_turtle.jpg' height=150px>The sharkiest analytics on the internet!</h1>
-    </div>
+    </div> -->
 
     <!--Navigation bar - static -->
 <!--     <div class="row header">
@@ -51,22 +55,25 @@
       <div class='col-md-1'><h4>|</h4></div>
       <div class='col-md-2'><h4><a href='#/linkClick'>Link clicks report</a></h4></div>
     </div> -->
+    <h3>  Welcome CompanyName</h3>
     <nav ng-controller="navbarController">
       <ul class="nav nav-tabs">
-        <li role="presentation"><a href="#/overall">Overall Report</a></li>
-        <li role="presentation"><a href="#/pageView">Pageview Report</a></li>
-        <li role="presentation"><a href="#/linkClick">Link clicks Report</a></li>
+        <li role="presentation"><a href="#/overview">Overview</a></li>
+        <li role="presentation"><a href="#/pageView">Page Wiew Report</a></li>
+        <li role="presentation"><a href="#/linkClick">Link Clicks Report</a></li>
         <li role="presentation" class="pull-right"><a href="#/logout">Log Out</a></li>
         <li ng-click='login()'role="presentation" class="pull-right"><a href="#/login">Log In</a></li>
         <li role="presentation" class="pull-right"><a href="#/signup">Sign Up</a></li>
       </ul>
     </nav>
 
-    <div class="row" ng-view>
+    <div class="container-fluid">
 
 
+      <div ng-view></div>
 
-    </div>
+    </div><!--end container-fluid-->
+
   </body>
 </html>
 
