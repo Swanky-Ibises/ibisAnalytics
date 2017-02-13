@@ -308,7 +308,11 @@ module.exports = function(app, express) {
         res.status(500).send(err);
       } else {
         console.log(user);
+        if(user === null || user.domain === null){
+          res.status(200).send(null);
+        } else {
         res.status(200).send(user.domain);
+        }
       }
     });
   });
