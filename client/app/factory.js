@@ -40,7 +40,7 @@ angular.module('sharkanalytics.factory', [])
   var getAllPages = function () {
     return $http({
       method: 'GET',
-      url: '/pageViewAll'
+      url: '/127.0.0.1/pageViewAll'
     })
     .then(function (response) {
       return response;

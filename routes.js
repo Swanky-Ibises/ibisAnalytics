@@ -156,7 +156,7 @@ module.exports = function(app, express) {
     var title = req.query.title;
     //find title in database
     model.pageViewModel.findOne({title: title}, function(err, page) {
-        if(err) {
+        if (err) {
         throw err;
       } else {
         res.status(200).send(page);
