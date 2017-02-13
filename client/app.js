@@ -80,8 +80,17 @@ angular.module('sharkanalytics',
 })
 
 .controller('profileController', function($scope, $http, store){
-    $scope.updateDomain = function() {
-      store.get
+    $scope.submitDomain = function() {
+      console.log(store.get("profile").email);
+      console.log($scope);
+      /*$http({
+        url: '/create',
+        method: 'POST',
+        data: {
+          email: store.get(profile).email,
+          domain: $scope.domain
+        }
+      })*/
     }
 })
 
