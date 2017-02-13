@@ -70,6 +70,10 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
     $scope.labels = label;
     $scope.data = data;
     $scope.options = {
+        title: {
+          display: true,
+          text: 'Average Time Spent on a page'
+        },
         scales: {
           yAxes: [
             {
