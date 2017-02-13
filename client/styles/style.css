@@ -221,6 +221,10 @@ footer a:link, footer a:visited {
   padding: 2em;
 }
 
+.welcome{
+  padding-left:1em;
+}
+
 body {
   /*position: relative;*/
   background-image: url(../images/Shark-Backgrounds-Photos-Pictures.jpg);
