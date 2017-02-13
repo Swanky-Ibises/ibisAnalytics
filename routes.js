@@ -382,7 +382,11 @@ module.exports = function(app, express) {
         console.log('error in fetching addresses');
         res.status(500).send(err);
       } else {
-        res.status(200).send(addresses[0].locationArray);
+        if (addresses.length > 0) {
+          res.status(200).send(addresses[0].locationArray);
+        } else {
+          res.status(200).send([]);
+        }
       }
     });
   })
