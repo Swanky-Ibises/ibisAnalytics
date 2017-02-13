@@ -1,13 +1,13 @@
 angular.module('sharkanalytics.factory', [])
 
 /* LINKS FACTORY */
-.factory('Links', function ($http) {
+.factory('Links', function ($http, $rootScope) {
 
   //should get all links from database
   var getAllLinks = function () {
     return $http({
       method: 'GET',
-      url: '/127.0.0.1/linkClickAll'
+      url: $rootScope.domainName + '/linkClickAll'
     })
     .then(function (response) {
       return response;
@@ -18,7 +18,7 @@ angular.module('sharkanalytics.factory', [])
   var getLink = function (url) {
     return $http({
       method: 'GET',
-      url: '/127.0.0.1/linkClick',
+      url: $rootScope.domainName + '/linkClick',
       params: {url: url}
     })
     .then(function (response) {
@@ -34,13 +34,13 @@ angular.module('sharkanalytics.factory', [])
 
 
 /* PAGES FACTORY */
-.factory('Pages', function ($http) {
+.factory('Pages', function ($http, $rootScope) {
 
   //should get all links from database
   var getAllPages = function () {
     return $http({
       method: 'GET',
-      url: '/127.0.0.1/pageViewAll'
+      url: $rootScope.domainName + '/pageViewAll'
     })
     .then(function (response) {
       return response;
@@ -51,7 +51,7 @@ angular.module('sharkanalytics.factory', [])
   var getPage = function (title) {
     return $http({
       method: 'GET',
-      url: '/127.0.0.1/pageView',
+      url: $rootScope.domainName + '/pageView',
       params: {title: title}
     })
     .then(function (response) {
