@@ -1,4 +1,4 @@
-angular.module('pagetimeChartJs',['chartJsFactory'])
+angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
 .controller('PageTimeController', function($scope, pageTimeFactory) {
   $scope.txt = 'hi there';
 })
@@ -42,10 +42,19 @@ angular.module('pagetimeChartJs',['chartJsFactory'])
   });
 
 })
-.controller('linkClickChartJsController', function($scope) {
+.controller('linkClickChartJsController', function($scope, Links) {
   //put this link controller here for displaying the link graph on home
-  $scope.labels = ['Home','Product','Checkout','Others'];
-  $scope.data = [300, 500, 100, 200];
+  var url = [];
+  var count = [];
+  Links.getAllLinks()
+  .then(function(res) {
+    res.data.forEach(function(linkItem) {
+      url.push(linkItem.url);
+      count.push(linkItem.count);
+    });
+  });
+  $scope.labels = url;
+  $scope.data = count;
   $scope.options = {
     title: {
       display: true,
