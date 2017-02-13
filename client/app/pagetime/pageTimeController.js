@@ -70,6 +70,10 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
     $scope.labels = label;
     $scope.data = data;
     $scope.options = {
+        title: {
+          display: true,
+          text: 'Average Time Spent on a page'
+        },
         scales: {
           yAxes: [
             {
@@ -85,7 +89,61 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
         }
     };
   });
+})
+.controller('CountryDemographicsController', function($scope, demographicsFactory) {
+    demographicsFactory.getCountry(function(labels, data) {
+      $scope.labels = labels;
+      $scope.data = data;
 
-
-
+      $scope.options = {
+        title: {
+          display: true,
+          text: 'Independent Visit per Country '
+        },
+        layout:{
+          padding: 5
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              beginAtZero: true,
+              stepSize: 1
+            },
+            scaleLabel: {
+              display: true,
+              labelString: "visits"
+            },
+            barThickness: 10
+          }]
+        }
+      };
+    });
+})
+.controller('CityDemographicsController', function($scope, demographicsFactory) {
+  demographicsFactory.getCity(function(label, data) {
+    $scope.labels = label;
+    $scope.data = data;
+    $scope.options = {
+      title: {
+        display: true,
+        text: 'Independent Visit per City'
+      },
+      layout:{
+        padding: 5
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "visits"
+          },
+          barThickness: 10
+        }]
+      }
+    };
+  });
 });
