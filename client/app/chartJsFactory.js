@@ -43,19 +43,26 @@ angular.module('charJsFactory', [])
   };
 
   var getDateTimeSeries = function(callback){
+    var dateHour;
     getPageTimeData().then(function(timesArray){
       for (var obj of timesArray){
-        dateTimeObj[obj.date] = dateTimeObj[obj.date]||[];
-        dateTimeObj[obj.date].push(obj.timeDifference/1000/60);
+        dateHour = _formatDate(obj.date)[0];
+        dateTimeObj[dateHour] = dateTimeObj[dateHour]||[];
+        dateTimeObj[dateHour].push(obj.timeDifference/1000/60);
       }
       var date_labels = Object.keys(dateTimeObj);
       date_data = getArrAvg(Object.values(dateTimeObj));
       callback(date_labels, date_data, dateTimeObj);
-      console.log('page_labels, page_data',date_labels, date_data);
     });
 
   };
 
+  function _formatDate(str) {
+    var regex = /(?:.)-(.*?)T(.*?):(?:)/gi;
+    var match = regex.exec(str);
+    var dateHour = match[1]+ ' ' +match[2]+'00'; //match[1] is date
+    return [dateHour, match[1]];
+  }
 
 
   //return methods in obj
