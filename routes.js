@@ -286,8 +286,7 @@ module.exports = function(app, express) {
     });
     saveNewModel(newAddress, 'address model');
     console.log(`created a model for username: ${email} , domain: ${domain}`);
-    var newLink
-    res.send('user created');
+    res.send(newUser);
   });
 
   app.get('/:domain/pagetime', function(req, res, next) {
@@ -308,10 +307,28 @@ module.exports = function(app, express) {
         res.status(500).send(err);
       } else {
         console.log(user);
-        if(user === null || user.domain === null){
-          res.status(200).send(null);
+        if (!user || !user.domain) {
+          res.status(200).send('User or user domain does not currently exist');
         } else {
-        res.status(200).send(user.domain);
+          res.status(200).send(user.domain);
+        }
+      }
+    });
+  });
+
+  app.post('/:email/updateDomain', function(req, res) {
+    var newDomain = req.body.domain;
+    model.userModel.findOne({email: req.params.email}, function(err, user) {
+      if (err) {
+        console.log('error in retrieving user');
+        res.status(500).send(err);
+      } else {
+        if (!user) {
+          res.status(200).send('User does not currently exist');
+        } else {
+          user.domain = newDomain;
+          res.send(user);
+          saveNewModel(user, 'user domain updated');
         }
       }
     });
