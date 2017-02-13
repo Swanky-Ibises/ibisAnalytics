@@ -28,6 +28,20 @@ module.exports = function(app, express) {
     });
   });
 
+  app.get('/:domain/linkClickAll', function(req, res) {
+    //find all urls in database
+    var domain = req.params.domain;
+    console.log('get from this domain', domain)
+    model.linkClickModel.find({domain})
+    .exec(function(err, linkClicks) {
+      if (err) {
+        console.log('error in fetching all link clicks for ', domain);
+      } else {
+        res.status(200).send(linkClicks);
+      }
+    });
+  });
+
   //GET request for a specified url
   app.get('/linkClick', function(req, res) {
     //pull url from query
@@ -47,32 +61,54 @@ module.exports = function(app, express) {
     res.header("Access-Control-Allow-Origin", "*");
     //pull url from request body
     var url = req.body.url;
+    var domain = req.body.domain;
+    console.log('url for link click', req.body);
     //create new timestamp
     var date = Date();
     //check if url exists in database
-    model.linkClickModel.findOne({url: url}, function(err, link) {
-      //if it exists, update count and add timestamp
-      if(link) {
-        link.count++;
-        link.date.push(date);
-        link.save();
-        res.status(200).send("Successfully updated link count")
-      //if not, create new record, set count to 1 and add timestamp (in array)
+    console.log('post to this domain', domain)
+    model.linkClickModel.find({domain: domain})
+    .exec(function(err, links) {
+      if (err) {
+        console.log('error in retrieving links from domain');
+        res.send(err);
       } else {
-        model.linkClickModel.create({
-          url: url,
-          count: 1,
-          date: [date]
-        }, function(err) {
-          if(err) {
-            throw err;
+        model.linkClickModel.findOne({url: url})
+        .exec(function(err, link) {
+          console.log('LINK HERE', link)
+          if(link) {
+            link.count++;
+            link.date.push(date);
+            link.save();
+            console.log("Successfully updated link count");
+            res.status(200).send("Successfully updated link count")
+          //if not, create new record, set count to 1 and add timestamp (in array)
           } else {
-            res.status(200).send("Successfully created new link record");
+            console.log('LINK CREATION HERE');
+            model.linkClickModel.create({
+              domain,
+              url: url,
+              count: 1,
+              date: [date]
+            }, function(err) {
+              if(err) {
+                throw err;
+              } else {
+                console.log("Successfully created new link record");
+                res.status(200).send("Successfully created new link record");
+              }
+            });
           }
-        });
+        })
       }
     });
+      //if it exists, update count and add timestamp
   });
+
+  // app.post('/:domain/linkClick', function(req, res) {
+  //   // model.linkClickModel.findOne({domain}, fun)
+  //   console.log(req.body.url)
+  // });
 
   /* pageView route */
   //GET request for a specified page
@@ -106,7 +142,6 @@ module.exports = function(app, express) {
     res.header("Access-Control-Allow-Origin", "*");
     //pull title from request body
     var title = req.body.title;
-    console.log('new title received', title);
     //create new timestamp
     var date = Date();
     //check if title exists in database
@@ -138,6 +173,7 @@ module.exports = function(app, express) {
 
   app.post('/pagetime', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    console.log('new location', req.body.newLocation);
     var storedObject = {
       timeDifference: req.body.timeDifference,
       location: req.body.location,
@@ -146,49 +182,66 @@ module.exports = function(app, express) {
     var domain = req.body.domain;
     console.log('domain',domain);
     model.pageTimeModel.findOne({domain: domain})
-      .exec(function(err, pageTimes) {
-        if (pageTimes) {
-          if (pageTimes.timesArray.length >= 200) {
-            pageTimes.timesArray.shift();
-          }
-          pageTimes.timesArray.push(storedObject);
-          saveNewModel(pageTimes, 'new pageTime data');
-          res.send('new pagetime data posted');
+    .exec(function(err, pageTimes) {
+      if (pageTimes) {
+        if (pageTimes.timesArray.length >= 200) {
+          pageTimes.timesArray.shift();
+        }
+        pageTimes.timesArray.push(storedObject);
+        saveNewModel(pageTimes, 'new pageTime data');
+        // res.send('new pagetime data posted');
+      } else {
+        console.log('error in finding pagetime model');
+        res.send(err);
+      }
+    });
+    var title = req.body.newLocation;
+    var date = Date();
+    if (title) {
+      model.pageViewModel.findOne({title: title})
+      .exec(function(err, pageView) {
+        if (pageView) {
+          pageView.count++;
+          pageView.date.push(req.body.date);
+          saveNewModel(pageView, 'new pageView increment');
         } else {
-          console.log('error in finding pagetime model');
-          res.send(err);
+          model.pageViewModel.create({title, count:1, date: [date]}, function(err, pageView) {
+            if (err) {
+              console.log('error in creating pageView model');
+              res.send(err);
+            } else {
+              console.log('Successfully created pageView model');
+            }
+          });
         }
       });
+    }
     console.log('this object', storedObject);
   });
 
 
   app.post('/create', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    var username = req.body.username;
+    var email = req.body.email;
     var domain = req.body.domain;
+    var newUser = new model.userModel({
+      email,
+      domain
+    });
+    saveNewModel(newUser, 'new user model');
     console.log('req.body.domain',req.body);
-    // model.pageTimeModel.findOne({username: username})
-    // .exec(function(err, pageTimes) {
-    //   if (!pageTimes) {
-    //   } else {
-    //     console.log(`username: ${username} already exists in the database. new username not saved`);
-    //     res.send(`username: ${username} already exists in the database. new username not saved`)
-    //   }
-    // });
     var newPageTime = new model.pageTimeModel({
-      username,
       domain,
       timesArray: []
     });
     saveNewModel(newPageTime, 'pageTime model');
     var newAddress = new model.addressModel({
-      username,
       domain,
       addressArray: []
     });
     saveNewModel(newAddress, 'address model');
-    console.log(`created a model for username: ${username} , domain: ${domain}`);
+    console.log(`created a model for username: ${email} , domain: ${domain}`);
+    var newLink
     res.send('user created');
   });
 

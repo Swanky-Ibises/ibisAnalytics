@@ -7,7 +7,7 @@ angular.module('sharkanalytics.factory', [])
   var getAllLinks = function () {
     return $http({
       method: 'GET',
-      url: '/linkClickAll'
+      url: '/127.0.0.1/linkClickAll'
     })
     .then(function (response) {
       return response;
