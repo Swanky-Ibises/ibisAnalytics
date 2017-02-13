@@ -28,6 +28,7 @@ module.exports = function(app, express) {
     });
   });
 
+
   app.get('/:domain/linkClickAll', function(req, res) {
     //find all urls in database
     var domain = req.params.domain;
@@ -36,11 +37,13 @@ module.exports = function(app, express) {
     .exec(function(err, linkClicks) {
       if (err) {
         console.log('error in fetching all link clicks for ', domain);
+        res.send(err);
       } else {
         res.status(200).send(linkClicks);
       }
     });
   });
+
 
   //GET request for a specified url
   app.get('/linkClick', function(req, res) {
@@ -55,6 +58,23 @@ module.exports = function(app, express) {
       }
     });
   });
+
+
+  app.get('/:domain/linkClick', function(req, res) {
+    var domain = req.params.domain;
+    var url = req.query.url;
+    model.linkClickModel.find({domain}, function(err, links) {
+      model.linkClickModel.find({url}, function(err, link) {
+        if (err) {
+          console.log(`error in fetching all link clicks for domain: ${domain}, url: ${url}`);
+          res.send(err);
+        } else {
+          res.status(200).send(link);
+        }
+      })
+    });
+  });
+
 
   //POST request
   app.post('/linkClick', function(req, res) {
@@ -75,7 +95,6 @@ module.exports = function(app, express) {
       } else {
         model.linkClickModel.findOne({url: url})
         .exec(function(err, link) {
-          console.log('LINK HERE', link)
           if(link) {
             link.count++;
             link.date.push(date);
@@ -84,7 +103,6 @@ module.exports = function(app, express) {
             res.status(200).send("Successfully updated link count")
           //if not, create new record, set count to 1 and add timestamp (in array)
           } else {
-            console.log('LINK CREATION HERE');
             model.linkClickModel.create({
               domain,
               url: url,
@@ -105,10 +123,6 @@ module.exports = function(app, express) {
       //if it exists, update count and add timestamp
   });
 
-  // app.post('/:domain/linkClick', function(req, res) {
-  //   // model.linkClickModel.findOne({domain}, fun)
-  //   console.log(req.body.url)
-  // });
 
   /* pageView route */
   //GET request for a specified page
@@ -119,6 +133,19 @@ module.exports = function(app, express) {
         throw err;
       } else {
         res.status(200).send(pages);
+      }
+    });
+  });
+
+  app.get('/:domain/pageviewall', function(req, res) {
+    var domain = req.params.domain;
+    model.pageViewModel.find({domain})
+    .exec(function(err, pageViews) {
+       if (err) {
+        console.log('error in fetching all page views for ', domain);
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(pageViews);
       }
     });
   });
@@ -138,38 +165,39 @@ module.exports = function(app, express) {
   });
 
   //POST request
-  app.post('/pageView', function(req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
-    //pull title from request body
-    var title = req.body.title;
-    //create new timestamp
-    var date = Date();
-    //check if title exists in database
-    model.pageViewModel.findOne({title: title}, function(err, page) {
-      console.log('existing title',title);
-      //if it exists, update count and add timestamp
-      if(page) {
-        page.count++;
-        page.date.push(date);
-        page.save();
-        res.status(200).send("Successfully updated page count");
-      //if not, create new record, set count to 1 and add timestamp (in array)
-      } else {
-        console.log('new title',title);
-        model.pageViewModel.create({
-          title: title,
-          count: 1,
-          date: [date]
-        }, function(err) {
-          if(err) {
-            throw err;
-          } else {
-            res.status(200).send("Successfully created new page record");
-          }
-        });
-      }
-    });
-  });
+  //No longer need this route. Instead in pagetime post route
+  // app.post('/pageView', function(req, res) {
+  //   res.header("Access-Control-Allow-Origin", "*");
+  //   //pull title from request body
+  //   var title = req.body.title;
+  //   //create new timestamp
+  //   var date = Date();
+  //   //check if title exists in database
+  //   model.pageViewModel.findOne({title: title}, function(err, page) {
+  //     console.log('existing title',title);
+  //     //if it exists, update count and add timestamp
+  //     if(page) {
+  //       page.count++;
+  //       page.date.push(date);
+  //       page.save();
+  //       res.status(200).send("Successfully updated page count");
+  //     //if not, create new record, set count to 1 and add timestamp (in array)
+  //     } else {
+  //       console.log('new title',title);
+  //       model.pageViewModel.create({
+  //         title: title,
+  //         count: 1,
+  //         date: [date]
+  //       }, function(err) {
+  //         if(err) {
+  //           throw err;
+  //         } else {
+  //           res.status(200).send("Successfully created new page record");
+  //         }
+  //       });
+  //     }
+  //   });
+  // });
 
   app.post('/pagetime', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -197,6 +225,7 @@ module.exports = function(app, express) {
     });
     var title = req.body.newLocation;
     var date = Date();
+    //title will be undefined if client navigates to another domain
     if (title) {
       model.pageViewModel.findOne({title: title})
       .exec(function(err, pageView) {
@@ -205,7 +234,7 @@ module.exports = function(app, express) {
           pageView.date.push(req.body.date);
           saveNewModel(pageView, 'new pageView increment');
         } else {
-          model.pageViewModel.create({title, count:1, date: [date]}, function(err, pageView) {
+          model.pageViewModel.create({domain, title, count:1, date: [date]}, function(err, pageView) {
             if (err) {
               console.log('error in creating pageView model');
               res.send(err);
@@ -216,6 +245,7 @@ module.exports = function(app, express) {
         }
       });
     }
+    res.status(201).send('new page data posted');
     console.log('this object', storedObject);
   });
 
