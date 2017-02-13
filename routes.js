@@ -60,20 +60,20 @@ module.exports = function(app, express) {
   });
 
 
-  app.get('/:domain/linkClick', function(req, res) {
-    var domain = req.params.domain;
-    var url = req.query.url;
-    model.linkClickModel.find({domain}, function(err, links) {
-      model.linkClickModel.find({url}, function(err, link) {
-        if (err) {
-          console.log(`error in fetching all link clicks for domain: ${domain}, url: ${url}`);
-          res.send(err);
-        } else {
-          res.status(200).send(link);
-        }
-      })
-    });
-  });
+  // app.get('/:domain/linkClick', function(req, res) {
+  //   var domain = req.params.domain;
+  //   var url = req.query.url;
+  //   model.linkClickModel.find({domain}, function(err, links) {
+  //     model.linkClickModel.find({url}, function(err, link) {
+  //       if (err) {
+  //         console.log(`error in fetching all link clicks for domain: ${domain}, url: ${url}`);
+  //         res.send(err);
+  //       } else {
+  //         res.status(200).send(link);
+  //       }
+  //     })
+  //   });
+  // });
 
 
   //POST request
@@ -161,6 +161,21 @@ module.exports = function(app, express) {
       } else {
         res.status(200).send(page);
       }
+    });
+  });
+
+  app.get('/:domain/pageview', function(req, res) {
+    var domain = req.params.domain;
+    var title = req.query.title;
+    model.pageViewModel.find({domain}, function(err, pageViews) {
+      model.pageViewModel.find({title}, function(err, pageView) {
+        if (err) {
+          console.log(`error in fetching all page views for domain: ${domain}, title: ${title}`);
+          res.send(err);
+        } else {
+          res.status(200).send(pageView);
+        }
+      })
     });
   });
 

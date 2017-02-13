@@ -51,7 +51,7 @@ angular.module('sharkanalytics.factory', [])
   var getPage = function (title) {
     return $http({
       method: 'GET',
-      url: '/pageView',
+      url: '/127.0.0.1/pageView',
       params: {title: title}
     })
     .then(function (response) {
