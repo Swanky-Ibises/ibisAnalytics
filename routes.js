@@ -235,7 +235,6 @@ module.exports = function(app, express) {
         // res.send('new pagetime data posted');
       } else {
         console.log('error in finding pagetime model');
-        res.send(err);
       }
     });
     var title = req.body.newLocation;

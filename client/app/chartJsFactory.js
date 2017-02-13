@@ -1,5 +1,5 @@
 angular.module('chartJsFactory', [])
-.factory('pageTimeFactory', function($http) {
+.factory('pageTimeFactory', function($http, $rootScope) {
 
   var pageTimeObj = {}; //{loc1:[timediff1,timediff2], loc2:[td1,td2,td3]..}
   var dateTimeObj = {}; //{date1:[time1,time2], date2:[td1,td2,td3]..}
@@ -8,7 +8,7 @@ angular.module('chartJsFactory', [])
   var getPageTimeData = function() {
     return $http({
       method: 'GET',
-      url: '/127.0.0.1/pageTime' //hardcode domain name for now
+      url: $rootScope.domainName + '/pageTime' //hardcode domain name for now
     })
     .then(function (response) {
       // console.log('response',response.data.timesArray);
