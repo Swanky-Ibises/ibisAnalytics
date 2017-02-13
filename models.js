@@ -12,6 +12,7 @@ var linkClickSchema = mongoose.Schema({
 
 //create new pageView schema
 var pageViewSchema = mongoose.Schema({
+  domain: String,
   title: String,
   count: Number,
   date: Array

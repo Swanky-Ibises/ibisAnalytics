@@ -18,7 +18,7 @@ angular.module('sharkanalytics.factory', [])
   var getLink = function (url) {
     return $http({
       method: 'GET',
-      url: '/linkClick',
+      url: '/127.0.0.1/linkClick',
       params: {url: url}
     })
     .then(function (response) {
@@ -40,7 +40,7 @@ angular.module('sharkanalytics.factory', [])
   var getAllPages = function () {
     return $http({
       method: 'GET',
-      url: '/pageViewAll'
+      url: '/127.0.0.1/pageViewAll'
     })
     .then(function (response) {
       return response;
@@ -51,7 +51,7 @@ angular.module('sharkanalytics.factory', [])
   var getPage = function (title) {
     return $http({
       method: 'GET',
-      url: '/pageView',
+      url: '/127.0.0.1/pageView',
       params: {title: title}
     })
     .then(function (response) {
