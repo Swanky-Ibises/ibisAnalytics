@@ -28,18 +28,19 @@ module.exports = function(app, express) {
     });
   });
 
-  // app.get('/:domain/linkClickAll', function(req, res) {
-  //   //find all urls in database
-  //   var domain = req.params.domain;
-  //   model.linkClickModel.find({domain})
-  //   .exec(function(err, linkClicks) {
-  //     if (err) {
-  //       console.log('error in fetching all link clicks for ', domain);
-  //     } else {
-  //       res.status(200).send(linkClicks);
-  //     }
-  //   });
-  // });
+  app.get('/:domain/linkClickAll', function(req, res) {
+    //find all urls in database
+    var domain = req.params.domain;
+    console.log('get from this domain', domain)
+    model.linkClickModel.find({domain})
+    .exec(function(err, linkClicks) {
+      if (err) {
+        console.log('error in fetching all link clicks for ', domain);
+      } else {
+        res.status(200).send(linkClicks);
+      }
+    });
+  });
 
   //GET request for a specified url
   app.get('/linkClick', function(req, res) {
@@ -65,7 +66,8 @@ module.exports = function(app, express) {
     //create new timestamp
     var date = Date();
     //check if url exists in database
-    model.linkClickModel.find({domain})
+    console.log('post to this domain', domain)
+    model.linkClickModel.find({domain: domain})
     .exec(function(err, links) {
       if (err) {
         console.log('error in retrieving links from domain');
@@ -73,6 +75,7 @@ module.exports = function(app, express) {
       } else {
         model.linkClickModel.findOne({url: url})
         .exec(function(err, link) {
+          console.log('LINK HERE', link)
           if(link) {
             link.count++;
             link.date.push(date);
@@ -82,6 +85,7 @@ module.exports = function(app, express) {
           //if not, create new record, set count to 1 and add timestamp (in array)
           } else {
             model.linkClickModel.create({
+              domain,
               url: url,
               count: 1,
               date: [date]
