@@ -61,8 +61,10 @@ angular.module('sharkanalytics',
           url: '/' + profile.email + '/domainName'
         })
         .then(function(response){
-          store.set("domainName", response.data);
-          $rootScope.domainName = store.get('domainName');
+          if(response.data !== 'User or user domain does not currently exist') {
+            store.set("domainName", response.data);
+            $rootScope.domainName = store.get('domainName');
+          }
         });
       },
       function(err){
