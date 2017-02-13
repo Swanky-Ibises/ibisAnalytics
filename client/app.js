@@ -47,16 +47,22 @@ angular.module('sharkanalytics',
     });
   })
 
-.controller('headerController', function($scope, auth, store, $location, $rootScope){
+.controller('headerController', function($scope, auth, store, $location, $rootScope, $http){
   
   $scope.login = function() {
-    console.log(auth);
     auth.signin({},
       function(profile, token) {
-        console.log(profile.user_metadata);
+        console.log(profile);
         store.set("profile", profile);
         store.set("webToken", token);
         $location.path('/overview');
+        $http({
+          method: 'GET',
+          url: '/:' + profile.email + '/domainName'
+        })
+        .then(function(response){
+          console.log(response);
+        });
       },
       function(err){
         console.log(err);
@@ -67,13 +73,16 @@ angular.module('sharkanalytics',
   $scope.logout = function() {
     store.remove('profile');
     store.remove('webToken');
+    store.remove('domain');
     auth.signout();
     $location.path('/');
   }
 })
 
 .controller('profileController', function($scope, $http, store){
-  
+    $scope.updateDomain = function() {
+      store.get
+    }
 })
 
 .run(function($rootScope, auth, store, jwtHelper, $location) {
