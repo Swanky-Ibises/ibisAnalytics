@@ -1,6 +1,6 @@
 angular.module('sharkanalytics',
-  ["chart.js",'sharkanalytics.pageView',
-
+  ["chart.js",
+  'sharkanalytics.pageView',
   'sharkanalytics.linkClick',
   'sharkanalytics.factory',
   'sharkanalyticss.linkClickPlotly',
@@ -38,6 +38,10 @@ angular.module('sharkanalytics',
       templateUrl: 'app/overall/homepage.html',
       controller: ''
     })
+    .when('/profile', {
+      templateUrl: 'app/profile/profile.html',
+      controller: 'profileController'
+    })
     .otherwise({
       redirectTo: '/'
     });
@@ -46,8 +50,10 @@ angular.module('sharkanalytics',
 .controller('headerController', function($scope, auth, store, $location, $rootScope){
   
   $scope.login = function() {
+    console.log(auth);
     auth.signin({},
       function(profile, token) {
+        console.log(profile.user_metadata);
         store.set("profile", profile);
         store.set("webToken", token);
         $location.path('/overview');
@@ -64,6 +70,10 @@ angular.module('sharkanalytics',
     auth.signout();
     $location.path('/');
   }
+})
+
+.controller('profileController', function($scope, $http, store){
+  
 })
 
 .run(function($rootScope, auth, store, jwtHelper, $location) {
