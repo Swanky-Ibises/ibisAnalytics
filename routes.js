@@ -84,6 +84,7 @@ module.exports = function(app, express) {
             res.status(200).send("Successfully updated link count")
           //if not, create new record, set count to 1 and add timestamp (in array)
           } else {
+            console.log('LINK CREATION HERE');
             model.linkClickModel.create({
               domain,
               url: url,
