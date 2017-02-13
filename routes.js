@@ -294,9 +294,21 @@ module.exports = function(app, express) {
     model.pageTimeModel.findOne({domain: req.params.domain}, function(err, time) {
       if(err) {
         console.log('error in finding domain pagetimeview');
-        res.status(500).send(error);
+        res.status(500).send(err);
       } else {
         res.status(200).send(time);
+      }
+    });
+  });
+
+  app.get('/:email/domainName', function(req, res) {
+    model.userModel.findOne({email: req.params.email}, function(err, user) {
+      if (err) {
+        console.log('error in retrieving user');
+        res.status(500).send(err);
+      } else {
+        console.log(user);
+        res.status(200).send(user.domain);
       }
     });
   });
