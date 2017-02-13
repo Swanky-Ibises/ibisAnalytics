@@ -77,13 +77,13 @@ angular.module('sharkanalytics',
     store.remove('domain');
     auth.signout();
     $location.path('/');
-  }
+  };
 })
 
 .controller('profileController', function($scope, $http, store){
     $scope.updateDomain = function() {
       store.get
-    }
+    };
 })
 
 .run(function($rootScope, auth, store, jwtHelper, $location) {
@@ -99,7 +99,7 @@ angular.module('sharkanalytics',
     } else {
       $location.path('/');
     }
-  })
+  });
 });
 
 

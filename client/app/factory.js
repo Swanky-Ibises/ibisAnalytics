@@ -63,4 +63,4 @@ angular.module('sharkanalytics.factory', [])
     getAllPages: getAllPages,
     getPage: getPage
   };
-})
+});
