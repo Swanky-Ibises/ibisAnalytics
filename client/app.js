@@ -6,6 +6,7 @@ angular.module('sharkanalytics',
   'sharkanalyticss.linkClickPlotly',
   'sharkanalytics.pageViewPlotly',
   'pagetimeChartJs',
+  'chartJsFactory',
   'ngRoute',
   'angular-jwt',
   'auth0',
@@ -47,8 +48,8 @@ angular.module('sharkanalytics',
     });
   })
 
+
 .controller('headerController', function($scope, auth, store, $location, $rootScope, $http){
-  
   $scope.login = function() {
     auth.signin({},
       function(profile, token) {
@@ -76,13 +77,13 @@ angular.module('sharkanalytics',
     store.remove('domain');
     auth.signout();
     $location.path('/');
-  }
+  };
 })
 
 .controller('profileController', function($scope, $http, store){
     $scope.updateDomain = function() {
       store.get
-    }
+    };
 })
 
 .run(function($rootScope, auth, store, jwtHelper, $location) {
@@ -98,7 +99,7 @@ angular.module('sharkanalytics',
     } else {
       $location.path('/');
     }
-  })
+  });
 });
 
 
