@@ -52,16 +52,16 @@ angular.module('sharkanalytics',
   $scope.login = function() {
     auth.signin({},
       function(profile, token) {
-        console.log(profile);
         store.set("profile", profile);
         store.set("webToken", token);
         $location.path('/overview');
         $http({
           method: 'GET',
-          url: '/:' + profile.email + '/domainName'
+          url: '/' + profile.email + '/domainName'
         })
         .then(function(response){
-          console.log(response);
+          store.set("domainName", response.data);
+          $rootScope.domainName = store.get('domainName');
         });
       },
       function(err){
@@ -73,29 +73,46 @@ angular.module('sharkanalytics',
   $scope.logout = function() {
     store.remove('profile');
     store.remove('webToken');
-    store.remove('domain');
+    store.remove('domainName');
     auth.signout();
     $location.path('/');
   }
 })
 
-.controller('profileController', function($scope, $http, store){
-    $scope.submitDomain = function() {
-      console.log(store.get("profile").email);
-      console.log($scope);
-      /*$http({
-        url: '/create',
-        method: 'POST',
-        data: {
-          email: store.get(profile).email,
-          domain: $scope.domain
-        }
-      })*/
-    }
+.controller('profileController', function($scope, $http, store, $rootScope){
+  $scope.submitDomain = function() {
+    $http({
+      url: '/create',
+      method: 'POST',
+      data: {
+        email: store.get("profile").email,
+        domain: $scope.domain
+      }
+    })
+    .then(function(response){
+      store.set('domainName', response.data.domain);
+      $rootScope.domainName = response.data.domain;
+    });
+  }
+
+  $scope.updateDomain = function() {
+    $http({
+      url: '/' + store.get("profile").email + '/updateDomain',
+      method: 'POST',
+      data: {
+        domain: $scope.domain
+      }
+    })
+    .then(function(response){
+      store.set("domainName", response.data.domain);
+      $rootScope.domainName = response.data.domain;
+    })
+  }
 })
 
 .run(function($rootScope, auth, store, jwtHelper, $location) {
   $rootScope.$on("$locationChangeStart", function() {
+  $rootScope.domainName = store.get("domainName");
 
     var token = store.get("webToken");
     if(token) {
