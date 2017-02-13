@@ -90,34 +90,39 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
     };
   });
 })
-.controller('CountryDemographicsController', function($scope) {
-    $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-    $scope.series = ['Series A', 'Series B'];
+.controller('CountryDemographicsController', function($scope, demographicsFactory) {
+    demographicsFactory.getCountry(function(labels, data) {
+      $scope.labels = labels;
+      $scope.data = data;
 
-    $scope.data = [
-      [65, 59, 80, 81, 56, 55, 40],
-      [28, 48, 40, 19, 86, 27, 90]
-    ];
-
-    $scope.options = {
-      title: {
-        display: true,
-        text: 'Independent Visit per Country '
-      },
-      layout:{
-        padding: 5
-      }
-    };
+      $scope.options = {
+        title: {
+          display: true,
+          text: 'Independent Visit per Country '
+        },
+        layout:{
+          padding: 5
+        },
+        scales: {
+          xAxes: [{
+            ticks: {
+              beginAtZero: true,
+              stepSize: 1
+            },
+            scaleLabel: {
+              display: true,
+              labelString: "visits"
+            },
+            barThickness: 10
+          }]
+        }
+      };
+    });
 })
-.controller('CityDemographicsController', function($scope) {
-    $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
-    $scope.series = ['Series A', 'Series B'];
-
-    $scope.data = [
-      [65, 59, 80, 81, 56, 55, 40],
-      [28, 48, 40, 19, 86, 27, 90]
-    ];
-
+.controller('CityDemographicsController', function($scope, demographicsFactory) {
+  demographicsFactory.getCity(function(label, data) {
+    $scope.labels = label;
+    $scope.data = data;
     $scope.options = {
       title: {
         display: true,
@@ -125,6 +130,20 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
       },
       layout:{
         padding: 5
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1
+          },
+          scaleLabel: {
+            display: true,
+            labelString: "visits"
+          },
+          barThickness: 10
+        }]
       }
     };
+  });
 });

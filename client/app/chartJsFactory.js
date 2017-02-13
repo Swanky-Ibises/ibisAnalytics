@@ -8,7 +8,7 @@ angular.module('chartJsFactory', [])
   var getPageTimeData = function() {
     return $http({
       method: 'GET',
-      url: $rootScope.domainName + '/pageTime' //hardcode domain name for now
+      url: $rootScope.domainName + '/pageTime'
     })
     .then(function (response) {
       // console.log('response',response.data.timesArray);
@@ -50,6 +50,8 @@ angular.module('chartJsFactory', [])
     var date_data = null;
     getPageTimeData().then(function(timesArray){
       for (var obj of timesArray){
+        //for the x-axis time display, improve to use time scale
+        //http://www.chartjs.org/docs/#scales-time-scale
         dateHour = _formatDate(obj.date)[0];
         dateTimeObj[dateHour] = dateTimeObj[dateHour]||[];
         dateTimeObj[dateHour].push(obj.timeDifference/1000/60);
@@ -76,6 +78,52 @@ angular.module('chartJsFactory', [])
     getAvgPageTime: getAvgPageTime,
     getDateTimeSeries: getDateTimeSeries
   };
+})
+.factory('demographicsFactory', function($http, $rootScope) {
+  var _getDemographicsData = function() {
+    return $http({
+      method: 'GET',
+      url: $rootScope.domainName + '/addresses'
+    })
+    .then(function (response) {
+      console.log('response',response.data);
+      return response.data;
+    });
+  };
+
+  var getCountry = function(callback) {
+    var countryObj = {};
+    _getDemographicsData().then(function(data) {
+      data.forEach(function(visit) {
+        countryObj[visit.country] = countryObj[visit.country] || 0;
+        countryObj[visit.country]++;
+      });
+      console.log(countryObj);
+      var labels = Object.keys(countryObj);
+      var demogData = Object.values(countryObj);
+      callback(labels, demogData);
+    });
+  };
+
+  var getCity = function(callback) {
+    var cityObj = {};
+    _getDemographicsData().then(function(data) {
+      data.forEach(function(visit) {
+        cityObj[visit.city] = cityObj[visit.city] || 0;
+        cityObj[visit.city]++;
+      });
+      console.log(cityObj);
+      var labels = Object.keys(cityObj);
+      var demogData = Object.values(cityObj);
+      callback(labels, demogData);
+    });
+  };
+
+  return {
+    getCountry:getCountry,
+    getCity:getCity
+  };
+
 });
 
 
