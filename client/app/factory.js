@@ -18,7 +18,7 @@ angular.module('sharkanalytics.factory', [])
   var getLink = function (url) {
     return $http({
       method: 'GET',
-      url: '/linkClick',
+      url: '/127.0.0.1/linkClick',
       params: {url: url}
     })
     .then(function (response) {
