@@ -17,16 +17,16 @@ module.exports = function(app, express) {
 
   /* linkClick route */
   //GET request for all data
-  app.get('/linkClickAll', function(req, res) {
-    //find all urls in database
-    model.linkClickModel.find({}, function(err, links) {
-      if(err) {
-        throw err;
-      } else {
-        res.status(200).send(links);
-      }
-    });
-  });
+  // app.get('/linkClickAll', function(req, res) {
+  //   //find all urls in database
+  //   model.linkClickModel.find({}, function(err, links) {
+  //     if(err) {
+  //       throw err;
+  //     } else {
+  //       res.status(200).send(links);
+  //     }
+  //   });
+  // });
 
 
   app.get('/:domain/linkClickAll', function(req, res) {
@@ -46,18 +46,18 @@ module.exports = function(app, express) {
 
 
   //GET request for a specified url
-  app.get('/linkClick', function(req, res) {
-    //pull url from query
-    var url = req.query.url;
-    //find url in database
-    model.linkClickModel.findOne({url: url}, function(err, link) {
-      if(err) {
-        throw err;
-      } else {
-        res.status(200).send(link);
-      }
-    });
-  });
+  // app.get('/linkClick', function(req, res) {
+  //   //pull url from query
+  //   var url = req.query.url;
+  //   //find url in database
+  //   model.linkClickModel.findOne({url: url}, function(err, link) {
+  //     if(err) {
+  //       throw err;
+  //     } else {
+  //       res.status(200).send(link);
+  //     }
+  //   });
+  // });
 
 
   app.get('/:domain/linkClick', function(req, res) {
@@ -126,16 +126,16 @@ module.exports = function(app, express) {
 
   /* pageView route */
   //GET request for a specified page
-  app.get('/pageViewAll', function(req, res) {
-    //find all pages in database
-    model.pageViewModel.find({}, function(err, pages) {
-      if(err) {
-        throw err;
-      } else {
-        res.status(200).send(pages);
-      }
-    });
-  });
+  // app.get('/pageViewAll', function(req, res) {
+  //   //find all pages in database
+  //   model.pageViewModel.find({}, function(err, pages) {
+  //     if(err) {
+  //       throw err;
+  //     } else {
+  //       res.status(200).send(pages);
+  //     }
+  //   });
+  // });
 
   app.get('/:domain/pageviewall', function(req, res) {
     var domain = req.params.domain;
@@ -151,24 +151,28 @@ module.exports = function(app, express) {
   });
 
   //GET request for a specified page
-  app.get('/pageView', function(req, res) {
-    //pull title from query
-    var title = req.query.title;
-    //find title in database
-    model.pageViewModel.findOne({title: title}, function(err, page) {
-        if (err) {
-        throw err;
-      } else {
-        res.status(200).send(page);
-      }
-    });
-  });
+  // app.get('/pageView', function(req, res) {
+  //   //pull title from query
+  //   var title = req.query.title;
+  //   //find title in database
+  //   model.pageViewModel.findOne({title: title}, function(err, page) {
+  //       if (err) {
+  //       throw err;
+  //     } else {
+  //       res.status(200).send(page);
+  //     }
+  //   });
+  // });
 
   app.get('/:domain/pageview', function(req, res) {
     var domain = req.params.domain;
     var title = req.query.title;
+    console.log('domain ', domain)
+    console.log('title', title);
     model.pageViewModel.find({domain}, function(err, pageViews) {
+      console.log('pageViews', pageViews);
       model.pageViewModel.find({title}, function(err, pageView) {
+        console.log('PAGE VIEW HERE', pageView)
         if (err) {
           console.log(`error in fetching all page views for domain: ${domain}, title: ${title}`);
           res.send(err);
@@ -216,6 +220,7 @@ module.exports = function(app, express) {
 
   app.post('/pagetime', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    console.log('HELLO')
     console.log('new location', req.body.newLocation);
     var storedObject = {
       timeDifference: req.body.timeDifference,
@@ -243,10 +248,11 @@ module.exports = function(app, express) {
     if (title) {
       model.pageViewModel.findOne({title: title})
       .exec(function(err, pageView) {
+        console.log('page view here', pageView)
         if (pageView) {
           pageView.count++;
           pageView.date.push(req.body.date);
-          saveNewModel(pageView, 'new pageView increment');
+          saveNewModel(pageView, 'new pageView increments');
         } else {
           model.pageViewModel.create({domain, title, count:1, date: [date]}, function(err, pageView) {
             if (err) {
@@ -335,7 +341,8 @@ module.exports = function(app, express) {
 
   app.post('/:domain/address', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
-    model.addressModel.findOne({domain: req.params.domain})
+    var domain = req.params.domain;
+    model.addressModel.findOne({domain})
       .exec(function(err, addressData) {
         if (addressData) {
           console.log('addressData', addressData);
@@ -365,6 +372,20 @@ module.exports = function(app, express) {
         }
       });
   });
+
+  app.get('/:domain/addresses', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    var domain = req.params.domain;
+    model.addressModel.find({domain})
+    .exec(function(err, addresses) {
+      if (err) {
+        console.log('error in fetching addresses');
+        res.status(500).send(err);
+      } else {
+        res.status(200).send(addresses[0].locationArray);
+      }
+    });
+  })
 };
 
 
