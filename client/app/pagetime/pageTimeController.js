@@ -9,7 +9,8 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
     $scope.page_options = {
       title: {
         display: true,
-        text: 'Avergae Page View Time'
+        text: 'Avergae Page View Time',
+        fontColor: '#00ffff'
       },
       scales: {
         yAxes: [{
@@ -32,7 +33,8 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
     $scope.options = {
       title: {
         display: true,
-        text: 'Percentage of Time Spent on Pages'
+        text: 'Percentage of Time Spent on Pages',
+        fontColor: '#00ffff'
       },
       layout:{
         padding: 5
@@ -58,7 +60,8 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
   $scope.options = {
     title: {
       display: true,
-      text: 'Percentage of Clicks on Each Link'
+      text: 'Percentage of Clicks on Each Link',
+      fontColor: '#00ffff'
     },
     layout:{
       padding: 5
@@ -72,7 +75,8 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
     $scope.options = {
         title: {
           display: true,
-          text: 'Average Time Spent on a page'
+          text: 'Average Time Spent on a page',
+          fontColor: '#00ffff'
         },
         scales: {
           yAxes: [
@@ -98,7 +102,8 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
       $scope.options = {
         title: {
           display: true,
-          text: 'Independent Visit per Country '
+          text: 'Independent Visit per Country ',
+          fontColor: '#00ffff'
         },
         layout:{
           padding: 5
@@ -126,7 +131,8 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
     $scope.options = {
       title: {
         display: true,
-        text: 'Independent Visit per City'
+        text: 'Independent Visit per City',
+        fontColor: '#00ffff'
       },
       layout:{
         padding: 5
