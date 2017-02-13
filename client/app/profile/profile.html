@@ -1,7 +1,7 @@
 <div ng-controller='profileController'>
-  <span>
-    Domain:
-    <input ng-model='domain' type='text' placeholder='Which domain?'>
-  </span>
-  <button ng-click="updateDomain()">Submit</button>
+  <input ng-model='domain' type='text' placeholder='Which domain?'>
+  <button ng-if='!$root.domainName' ng-click="submitDomain()">Submit</button>
+  <button ng-if='$root.domainName' ng-click="updateDomain()">Update</button>
+  <div ng-if="$root.domainName">
+  <span>Your domain is: {{ $root.domainName }} </span>
 </div>
