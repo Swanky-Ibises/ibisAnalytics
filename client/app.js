@@ -6,7 +6,7 @@ angular.module('sharkanalytics',
   'sharkanalyticss.linkClickPlotly',
   'sharkanalytics.pageViewPlotly',
   'pagetimeChartJs',
-  'charJsFactory',
+  'chartJsFactory',
   'ngRoute',
   'angular-jwt',
   'auth0',
@@ -48,8 +48,8 @@ angular.module('sharkanalytics',
     });
   })
 
+
 .controller('headerController', function($scope, auth, store, $location, $rootScope, $http){
-  
   $scope.login = function() {
     auth.signin({},
       function(profile, token) {

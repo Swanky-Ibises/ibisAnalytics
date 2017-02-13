@@ -1,4 +1,4 @@
-angular.module('pagetimeChartJs',['charJsFactory'])
+angular.module('pagetimeChartJs',['chartJsFactory'])
 .controller('PageTimeController', function($scope, pageTimeFactory) {
   $scope.txt = 'hi there';
 })

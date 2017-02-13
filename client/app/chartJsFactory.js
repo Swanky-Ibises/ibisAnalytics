@@ -1,4 +1,4 @@
-angular.module('charJsFactory', [])
+angular.module('chartJsFactory', [])
 .factory('pageTimeFactory', function($http) {
 
   var pageTimeObj = {}; //{loc1:[timediff1,timediff2], loc2:[td1,td2,td3]..}
@@ -8,10 +8,10 @@ angular.module('charJsFactory', [])
   var getPageTimeData = function() {
     return $http({
       method: 'GET',
-      url: '/localhost/pageTime' //hardcode domain name for now
+      url: '/127.0.0.1/pageTime' //hardcode domain name for now
     })
     .then(function (response) {
-      console.log('response',response.data.timesArray);
+      // console.log('response',response.data.timesArray);
       return response.data.timesArray;
     });
   };
@@ -31,6 +31,8 @@ angular.module('charJsFactory', [])
   };
 
   var getAvgPageTime = function(callback) {
+    var page_labels = null;
+    var page_data = null;
     getPageTimeData().then(function(timesArray){
       for (var obj of timesArray){
         pageTimeObj[obj.location] = pageTimeObj[obj.location]||[];
@@ -43,14 +45,16 @@ angular.module('charJsFactory', [])
   };
 
   var getDateTimeSeries = function(callback){
-    var dateHour;
+    var dateHour = null;
+    var date_labels = null;
+    var date_data = null;
     getPageTimeData().then(function(timesArray){
       for (var obj of timesArray){
         dateHour = _formatDate(obj.date)[0];
         dateTimeObj[dateHour] = dateTimeObj[dateHour]||[];
         dateTimeObj[dateHour].push(obj.timeDifference/1000/60);
       }
-      var date_labels = Object.keys(dateTimeObj);
+      date_labels = Object.keys(dateTimeObj);
       date_data = getArrAvg(Object.values(dateTimeObj));
       callback(date_labels, date_data, dateTimeObj);
     });
