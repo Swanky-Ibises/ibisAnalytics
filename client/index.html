@@ -57,7 +57,7 @@
       <div class='col-md-2'><h4><a href='#/linkClick'>Link clicks report</a></h4></div>
     </div> -->
     <div ng-controller="headerController">
-    <h3 ng-if="$root.isAuthenticated">  Welcome CompanyName</h3>
+    <h3 ng-if="$root.isAuthenticated">  Welcome {{domainName}}</h3>
     <nav>
       <ul class="nav nav-tabs">
         <li ng-if="$root.isAuthenticated" role="presentation"><a href="#/overview">Overview</a></li>
