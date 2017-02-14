@@ -226,9 +226,9 @@ footer a:link, footer a:visited {
 }
 
 body {
-  /*position: relative;*/
-  background-image: url(../images/Shark-Backgrounds-Photos-Pictures.jpg);
-  background-image: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.1) 100%), url(../images/Shark-Backgrounds-Photos-Pictures.jpg);
+  /*position: relative; */
+  /*background-image: url(../images/Shark-Backgrounds-Photos-Pictures.jpg);*/
+  background-image: linear-gradient(to bottom, #031c1c, #0e0237, #000002);
 }
 
 

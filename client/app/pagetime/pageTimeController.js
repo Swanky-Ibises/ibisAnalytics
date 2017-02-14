@@ -18,6 +18,9 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
           scaleLabel: {
             display: true,
             labelString: "min"
+          },
+          gridLines: {
+            color: "#00ffff"
           }
         }]
       }
@@ -84,7 +87,10 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
               id: 'y-axis-1',
               type: 'linear',
               display: true,
-              position: 'left'
+              position: 'left',
+              gridLines: {
+                color: "#00ffff",
+              }
             }
           ]
         },
@@ -118,7 +124,10 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
               display: true,
               labelString: "visits"
             },
-            barThickness: 10
+            barThickness: 10,
+            gridLines: {
+              color: "#00ffff",
+            }
           }]
         }
       };
@@ -147,7 +156,10 @@ angular.module('pagetimeChartJs',['chartJsFactory','sharkanalytics.factory'])
             display: true,
             labelString: "visits"
           },
-          barThickness: 10
+          barThickness: 10,
+          gridLines: {
+            color: "#00ffff",
+          }
         }]
       }
     };
