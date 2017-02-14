@@ -1,56 +1,42 @@
-#Shark Analytics
-This analytics tool can be installed on any website and allows site owners to track visits to their page, as well as clicks on individual links. It uses Plotly to display site visits and link clicks visually, and a MongoDB database to store information.
+# Shark Analytics 2.0
+This Ibis Analytics tool builds on top of [Shark Analytics](https://github.com/sharkanalytics/sharkanalytics) on MEAN stack and can be installed on any website and allows site owners to track visits to their page. Angular-ChartJS and Plotly are used for visual graph display.  
+The information tracked include:
 
-##Team
+* Time spent on each page
+* Geographic location of each independent user
+* Visits to pages
+* Clicks to links 
 
-Product Owner: Tony Hyde
-Scrum Master: Erica Stephan
-Development Team Members: Ian George, Jeff Bentler
+Potential Future improvements:
 
-##Table of Contents
+* Time spent on each session
+* Enable time scale change between hour/day/month/year on the line graph
+* Strengthen security
 
-###Usage
-###Requirements
-###Development
-###Installing Dependencies
-###Tasks
-###Team
-###Contributing
+## Team
+Bobby Phan, Tyler MacKay, Sherry Hsu
 
- -
+## Usage
+The Ibis Analytics dashboard displays data sent back from `IbisAnalytics.js script. 
+To track the data on your website and view statistics on the dashboard:
 
-##Usage
+1. Sign up an account on the [Ibises Analytics](https://ibises-analytics.herokuapp.com/) dashboard
+2. Input the domain name of your website on the Profile page after `http://`. Don't include leading and trailing slashes
+    * For instance: `swankbuyify.herokuapp.com`
+3. Download the `IbisAnalytics.js` script and include it in the root html page e.g. `index.html`
+    * If your website is a Single Page App, include the script on the index.html 
+    * If it has multiple pages, include the script on every page
+4. That's it! Happy Tracking!
 
-This app relies on a separate add-on script that can be implemented on a third party's website to track clicks on that site. This script is in the Buyify repository <a href="https://github.com/sharkanalytics/buyify/blob/master/README.md">here</a>. The filename for the tracking library that is central the shark analytics application is named wokeSharks.js
+## Examples
+Deploy: `https://ibises-analytics.herokuapp.com/` 
 
-##Requirements
+Tracked websites: [Buyify](http://swankbuyify.herokuapp.com/) and [Mastermind](http://master-mind.herokuapp.com/)
 
-Node 0.10.x
-Plot.ly
-D3
-Mongoose
+## Development
+Here are some things to be aware of:
+* Security should be enhanced so that each user only has access to their registered domain on the dashboard
 
-##Development
-
-##Installing Dependencies
-
-From within the root directory:
-
-sudo npm install -g bower
-npm install
-bower install
-npm install express
-npm install mongoose
-
-##Roadmap
-
-View the project roadmap here:
-https://waffle.io/sharkanalytics/sharkanalytics
-
-##Contributing
-
-Features that remain to be implemented include:
-
-- graphs by date of individual links, to see which days were most popular for clicking a given link
-- allow hiding of stats and collapsing of dates individually by link instead of all at once
-- build out additional endpoints on the Buyify demo site
+## To set up a local deploy of analytics dashboard
+1. `npm install`
+2. `npm start`
