@@ -368,7 +368,7 @@ module.exports = function(app, express) {
           console.log('addressData', addressData);
         } else {
           console.log('error in retrieving address data. Check to see if user has signed up domain in analytics');
-          res.status(500).send(err);
+          res.send('error in retrieving address data. Check to see if user has signed up domain in analytics');
         }
       });
   });
