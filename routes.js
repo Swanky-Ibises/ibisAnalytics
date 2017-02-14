@@ -12,27 +12,15 @@ var saveNewModel = function(model, modelName) {
     }
   });
 }
+
 //export routes to app file
 module.exports = function(app, express) {
 
-  /* linkClick route */
-  //GET request for all data
-  // app.get('/linkClickAll', function(req, res) {
-  //   //find all urls in database
-  //   model.linkClickModel.find({}, function(err, links) {
-  //     if(err) {
-  //       throw err;
-  //     } else {
-  //       res.status(200).send(links);
-  //     }
-  //   });
-  // });
 
-
+  //This route gets all the link clicks for a particular domain. Put the name of the domain in the path to use
   app.get('/:domain/linkClickAll', function(req, res) {
     //find all urls in database
     var domain = req.params.domain;
-    console.log('get from this domain', domain)
     model.linkClickModel.find({domain})
     .exec(function(err, linkClicks) {
       if (err) {
@@ -45,21 +33,7 @@ module.exports = function(app, express) {
   });
 
 
-  //GET request for a specified url
-  // app.get('/linkClick', function(req, res) {
-  //   //pull url from query
-  //   var url = req.query.url;
-  //   //find url in database
-  //   model.linkClickModel.findOne({url: url}, function(err, link) {
-  //     if(err) {
-  //       throw err;
-  //     } else {
-  //       res.status(200).send(link);
-  //     }
-  //   });
-  // });
-
-
+  //This route gets all the link clicks for a particular domain. Put the name of the domain in the path to use
   app.get('/:domain/linkClick', function(req, res) {
     var domain = req.params.domain;
     var url = req.query.url;
@@ -76,7 +50,7 @@ module.exports = function(app, express) {
   });
 
 
-  //POST request
+  //POST request for a link click
   app.post('/linkClick', function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     //pull url from request body
@@ -123,20 +97,7 @@ module.exports = function(app, express) {
       //if it exists, update count and add timestamp
   });
 
-
-  /* pageView route */
-  //GET request for a specified page
-  // app.get('/pageViewAll', function(req, res) {
-  //   //find all pages in database
-  //   model.pageViewModel.find({}, function(err, pages) {
-  //     if(err) {
-  //       throw err;
-  //     } else {
-  //       res.status(200).send(pages);
-  //     }
-  //   });
-  // });
-
+  //This route gets all the page views for a particular domain. Put the name of the domain in the path to use
   app.get('/:domain/pageviewall', function(req, res) {
     var domain = req.params.domain;
     model.pageViewModel.find({domain})
@@ -150,20 +111,8 @@ module.exports = function(app, express) {
     });
   });
 
-  //GET request for a specified page
-  // app.get('/pageView', function(req, res) {
-  //   //pull title from query
-  //   var title = req.query.title;
-  //   //find title in database
-  //   model.pageViewModel.findOne({title: title}, function(err, page) {
-  //       if (err) {
-  //       throw err;
-  //     } else {
-  //       res.status(200).send(page);
-  //     }
-  //   });
-  // });
 
+  //This route gets one pages views for a particular domain. Put the name of the domain in the path to use
   app.get('/:domain/pageview', function(req, res) {
     var domain = req.params.domain;
     var title = req.query.title;
@@ -183,45 +132,9 @@ module.exports = function(app, express) {
     });
   });
 
-  //POST request
-  //No longer need this route. Instead in pagetime post route
-  // app.post('/pageView', function(req, res) {
-  //   res.header("Access-Control-Allow-Origin", "*");
-  //   //pull title from request body
-  //   var title = req.body.title;
-  //   //create new timestamp
-  //   var date = Date();
-  //   //check if title exists in database
-  //   model.pageViewModel.findOne({title: title}, function(err, page) {
-  //     console.log('existing title',title);
-  //     //if it exists, update count and add timestamp
-  //     if(page) {
-  //       page.count++;
-  //       page.date.push(date);
-  //       page.save();
-  //       res.status(200).send("Successfully updated page count");
-  //     //if not, create new record, set count to 1 and add timestamp (in array)
-  //     } else {
-  //       console.log('new title',title);
-  //       model.pageViewModel.create({
-  //         title: title,
-  //         count: 1,
-  //         date: [date]
-  //       }, function(err) {
-  //         if(err) {
-  //           throw err;
-  //         } else {
-  //           res.status(200).send("Successfully created new page record");
-  //         }
-  //       });
-  //     }
-  //   });
-  // });
-
-  app.post('/pagetime', function(req, res, next) {
+  //This post route creates or pushes into the pagetime model. Additionally, this route will create or push into the pageview model
+  app.post('/pagetime', function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
-    console.log('HELLO')
-    console.log('new location', req.body.newLocation);
     var storedObject = {
       timeDifference: req.body.timeDifference,
       location: req.body.location,
@@ -239,7 +152,11 @@ module.exports = function(app, express) {
         saveNewModel(pageTimes, 'new pageTime data');
         // res.send('new pagetime data posted');
       } else {
-        console.log('error in finding pagetime model');
+        var newPageTime = new model.pageTimeModel({
+          domain,
+          timesArray: []
+        });
+        saveNewModel(newPageTime, 'pageTime model');
       }
     });
     var title = req.body.newLocation;
@@ -248,7 +165,6 @@ module.exports = function(app, express) {
     if (title) {
       model.pageViewModel.findOne({title: title})
       .exec(function(err, pageView) {
-        console.log('page view here', pageView)
         if (pageView) {
           pageView.count++;
           pageView.date.push(req.body.date);
@@ -266,35 +182,11 @@ module.exports = function(app, express) {
       });
     }
     res.status(201).send('new page data posted');
-    console.log('this object', storedObject);
   });
 
 
-  app.post('/create', function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    var email = req.body.email;
-    var domain = req.body.domain;
-    var newUser = new model.userModel({
-      email,
-      domain
-    });
-    saveNewModel(newUser, 'new user model');
-    console.log('req.body.domain',req.body);
-    var newPageTime = new model.pageTimeModel({
-      domain,
-      timesArray: []
-    });
-    saveNewModel(newPageTime, 'pageTime model');
-    var newAddress = new model.addressModel({
-      domain,
-      addressArray: []
-    });
-    saveNewModel(newAddress, 'address model');
-    console.log(`created a model for username: ${email} , domain: ${domain}`);
-    res.send(newUser);
-  });
 
-  app.get('/:domain/pagetime', function(req, res, next) {
+  app.get('/:domain/pagetime', function(req, res) {
     model.pageTimeModel.findOne({domain: req.params.domain}, function(err, time) {
       if(err) {
         console.log('error in finding domain pagetimeview');
@@ -305,6 +197,24 @@ module.exports = function(app, express) {
     });
   });
 
+
+  //This post route creates a new user model with email and domain
+  app.post('/create', function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    var email = req.body.email;
+    var domain = req.body.domain;
+    var newUser = new model.userModel({
+      email,
+      domain
+    });
+    saveNewModel(newUser, 'new user model');
+    console.log('req.body.domain',req.body);
+    console.log(`created a model for username: ${email} , domain: ${domain}`);
+    res.send(newUser);
+  });
+
+
+  //This get route fetches the domain name when given an email
   app.get('/:email/domainName', function(req, res) {
     model.userModel.findOne({email: req.params.email}, function(err, user) {
       if (err) {
@@ -321,6 +231,8 @@ module.exports = function(app, express) {
     });
   });
 
+
+  //This post route updates the domain name when given an email
   app.post('/:email/updateDomain', function(req, res) {
     var newDomain = req.body.domain;
     model.userModel.findOne({email: req.params.email}, function(err, user) {
@@ -339,41 +251,47 @@ module.exports = function(app, express) {
     });
   });
 
-  app.post('/:domain/address', function(req, res, next) {
+
+  //This post route creates or pushes a new address to the address model.. Put the name of the domain in the path to use
+  app.post('/:domain/address', function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     var domain = req.params.domain;
     model.addressModel.findOne({domain})
-      .exec(function(err, addressData) {
-        if (addressData) {
-          console.log('addressData', addressData);
-          var locationArr = addressData.locationArray;
-          if (locationArr.length >= 100) {
-            locationArr.shift();
-          }
-          //Checks to see if IP address is already in location array
-          var ipExists = false;
-          for (let i = 0; i < locationArr.length; i++) {
-            if (locationArr[i].ip === req.body.ip) {
-              console.log('Ip address already exists in location array, address not saved');
-              ipExists = true;
-              res.send('Ip address already exists in location array, address not saved');
-              return;
-            }
-          }
-          if (!ipExists) {
-            locationArr.push(req.body);
-            saveNewModel(addressData, 'new location added');
-            res.send('address posted to array');
-          }
-          console.log('addressData', addressData);
-        } else {
-          console.log('error in retrieving address data. Check to see if user has signed up domain in analytics');
-          res.send('error in retrieving address data. Check to see if user has signed up domain in analytics');
+    .exec(function(err, addressData) {
+      if (addressData) {
+        console.log('addressData', addressData);
+        var locationArr = addressData.locationArray;
+        if (locationArr.length >= 100) {
+          locationArr.shift();
         }
-      });
+        //Checks to see if IP address is already in location array
+        var ipExists = false;
+        for (let i = 0; i < locationArr.length; i++) {
+          if (locationArr[i].ip === req.body.ip) {
+            console.log('Ip address already exists in location array, address not saved');
+            ipExists = true;
+            res.send('Ip address already exists in location array, address not saved');
+            return;
+          }
+        }
+        if (!ipExists) {
+          locationArr.push(req.body);
+          saveNewModel(addressData, 'new location added');
+          res.send('address posted to array');
+        }
+      } else {
+        var newAddress = new model.addressModel({
+          domain,
+          addressArray: []
+        });
+        saveNewModel(newAddress, 'address model');
+      }
+    });
   });
 
-  app.get('/:domain/addresses', function(req, res, next) {
+
+  //This route gets all the addresses for a particular domain. Returns an array of addresses. Put the name of the domain in the path to use
+  app.get('/:domain/addresses', function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     var domain = req.params.domain;
     model.addressModel.find({domain})
