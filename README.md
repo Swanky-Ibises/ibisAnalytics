@@ -1,4 +1,4 @@
-# Shark Analytics 2.0
+# Ibis Analytics 2.0
 This Ibis Analytics tool builds on top of [Shark Analytics](https://github.com/sharkanalytics/sharkanalytics) on MEAN stack and can be installed on any website and allows site owners to track visits to their page. Angular-ChartJS and Plotly are used for visual graph display.  
 The information tracked include:
 
@@ -17,7 +17,7 @@ Potential Future improvements:
 Bobby Phan, Tyler MacKay, Sherry Hsu
 
 ## Usage
-The Ibis Analytics dashboard displays data sent back from `IbisAnalytics.js script. 
+The Ibis Analytics dashboard displays data sent back from `IbisAnalytics.js` script. 
 To track the data on your website and view statistics on the dashboard:
 
 1. Sign up an account on the [Ibises Analytics](https://ibises-analytics.herokuapp.com/) dashboard
